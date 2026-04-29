@@ -1,0 +1,52 @@
+[
+  {
+    "trajectory": {
+      "topic": "multimodal hallucination detection",
+      "queries": [
+        "Include terms like 'comparative analysis', 'technical evaluation', 'implementation details', and 'ablation studies' to find more in-depth and technical papers."
+      ],
+      "paper_count": 7
+    },
+    "reward": 0.8301851851851852
+  },
+  {
+    "trajectory": {
+      "topic": "multimodal hallucination detection",
+      "queries": [
+        "Include papers that provide a detailed comparison of hallucination detection methods across diverse domains such as autonomous driving, robotics, and other specialized fields, and ensure code availability is mentioned."
+      ],
+      "paper_count": 9
+    },
+    "reward": 0.780925925925926
+  },
+  {
+    "trajectory": {
+      "topic": "multimodal hallucination detection",
+      "queries": [
+        "Include more papers with available code repositories, detailed dataset descriptions, and focus on specific modalities (e.g., audio-visual) to improve reproducibility, coverage, and diversity."
+      ],
+      "paper_count": 11
+    },
+    "reward": 0.7731060606060606
+  },
+  {
+    "trajectory": {
+      "topic": "multimodal hallucination detection",
+      "queries": [
+        "Include terms like 'contrastive learning', 'adversarial training', or 'self-supervised learning' to ensure diversity in technical approaches. Also, add terms like 'open-source', 'code release', 'github', or 'implementation' to find papers with available code for multimodal hallucination detection."
+      ],
+      "paper_count": 7
+    },
+    "reward": 0.747642857142857
+  },
+  {
+    "trajectory": {
+      "topic": "Semantic segmentation",
+      "queries": [
+        "Include recent papers (2023-2024) on semantic segmentation, specifically those with non-deep learning approaches, and ensure datasets and code availability are mentioned. Also, focus on papers that provide code implementations."
+      ],
+      "paper_count": 11
+    },
+    "reward": 0.6566060606060605
+  }
+]
