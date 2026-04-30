@@ -2,6 +2,8 @@
 
 > 目标：构建一个从论文调研到代码复现的一体化智能体系统，融合强化学习思想实现自我改进闭环。
 
+> 当前状态：主调研图、代码复现子图、奖励函数、Best-of-N、经验回放、评估模块和 Streamlit 界面均已实现；本文件同时作为项目规划与完成记录。
+
 ---
 
 ## 一、项目总览
@@ -30,6 +32,20 @@ SOTA-Bench Agent 是一个面向 AI 研究主题的多级智能体系统：
 ```
 Level 2（调研 Agent）→ Level 2.5（反思 + RL 循环）→ Level 3（代码执行闭环）
 ```
+
+### 1.4 已完成能力概览
+
+| 能力 | 当前状态 | 对应实现 |
+|------|---------|---------|
+| 调研规划 | 已完成 | Query Planner + Search Agent + Paper Filter |
+| 结构化抽取 | 已完成 | Info Extractor + GitHub URL 校验 |
+| 反思循环 | 已完成 | Reflector + Decision Node |
+| 报告生成 | 已完成 | Report Writer + Markdown 输出 |
+| 代码复现闭环 | 已完成 | Repo Fetcher → Executor → Patch Generator |
+| 奖励机制 | 已完成 | `rl/reward.py` |
+| Best-of-N | 已完成 | `rl/best_of_n.py` |
+| 经验回放 | 已完成 | `rl/experience_buffer.py` |
+| 评估模块 | 已完成 | `evaluation/metrics.py`、`evaluation/ablation.py`、`evaluation/visualize.py` |
 
 ---
 
@@ -94,32 +110,40 @@ Repo Fetcher → Code Parser → Execution Planner
 ### 2.3 状态设计
 
 ```python
-from typing import TypedDict, List, Dict, Annotated
+from typing import TypedDict, Annotated
 import operator
 
-class ResearchState(TypedDict):
-    # 基础字段
-    topic: str
-    search_queries: List[str]
-    raw_results: Annotated[List[Dict], operator.add]
-    extracted_papers: List[Dict]
+class PaperInfo(TypedDict, total=False):
+  title: str
+  year: int
+  method: str
+  dataset: str
+  code_url: str
+  contribution: str
+  relevance_score: float
+  paper_type: str
 
-    # 反思与 RL
-    reflection_feedback: str
-    reward_scores: List[float]          # 每轮反思的奖励分数
-    loop_count: int
-    best_trajectory: Dict               # 经验回放：最佳轨迹
 
-    # 输出
-    final_report: str
+class ResearchState(TypedDict, total=False):
+  topic: str
+  search_queries: list[str]
+  raw_results: Annotated[list[dict], operator.add]
+  extracted_papers: list[PaperInfo]
 
-    # Level 3 扩展
-    target_repo_url: str
-    repo_files: Dict[str, str]
-    execution_logs: str
-    reproduction_status: str
-    code_reward_scores: List[float]     # 代码执行奖励
+  reflection_feedback: str
+  reward_scores: Annotated[list[float], operator.add]
+  loop_count: int
+
+  final_report: str
+
+  target_repo_url: str
+  repo_files: dict[str, str]
+  execution_logs: str
+  reproduction_status: str
+  code_reward_scores: Annotated[list[float], operator.add]
 ```
+
+这版状态定义与当前代码一致，重点是把论文信息抽成 `PaperInfo`，并让可累加字段通过 `Annotated[..., operator.add]` 聚合。
 
 ---
 
@@ -191,6 +215,8 @@ def reflector(state: ResearchState) -> dict:
     }
 ```
 
+  当前实现中，反思节点还会在没有真实 GitHub 代码时自动增强查询，并把新查询写回 `search_queries`，这一点在 `agents/reflector.py` 里已经落地。
+
 #### 第二层：Best-of-N 采样 + 奖励排序（推荐）
 
 对关键节点（Query Planner、Info Extractor）生成 N 个候选输出，用奖励函数选最优：
@@ -206,6 +232,8 @@ def best_of_n_extract(state: ResearchState, n: int = 3) -> dict:
     best = max(candidates, key=lambda x: x[1])
     return {"extracted_papers": best[0], "reward_scores": [..., best[1]]}
 ```
+
+  当前代码默认在主图中启用 `best_of_n_extract`，以提高抽取稳定性。
 
 奖励函数设计：
 
@@ -233,6 +261,8 @@ class ExperienceBuffer:
     def sample_best(self, k=3) -> list:
         return self.buffer[:k]
 ```
+
+  主图结束时会调用 `save_experience()` 将轨迹写入 `outputs/experience_buffer.json`，为后续任务提供 few-shot 示例。
 
 将高奖励轨迹注入 prompt：
 
@@ -709,6 +739,13 @@ sota_bench_agent/
   - 侧边栏：消融实验入口（输入主题 → 运行 4 种配置）
   - 页面底部：评估面板（历史奖励趋势 tab + 消融实验结果 tab）
   - 调研完成后自动展示当次运行的奖励曲线
+
+### 实验报告输出（已完成 ✅）
+
+- [x] `SOTA_Bench_Agent_Experiment_Report.md` — 实验报告补全
+  - 新增“实验设置、运行结果、案例分析”章节
+  - 增加表格化展示：节点职责、状态字段、关键参数、奖励机制
+  - 补充代码片段说明：主图路由、代码执行隔离、奖励函数加权
 
 ### Code URL 虚假链接修复（已完成 ✅）
 

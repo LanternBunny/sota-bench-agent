@@ -2,12 +2,37 @@
 
 从论文调研到代码复现的一体化智能体系统，融合强化学习思想实现自我改进闭环。
 
+## 当前状态
+
+项目主流程已经完成，包括调研图、代码复现子图、奖励函数、Best-of-N、经验回放、评估模块与 Streamlit 界面。更详细的实验说明见 [SOTA_Bench_Agent_Experiment_Report.md](SOTA_Bench_Agent_Experiment_Report.md)，项目规划与完成记录见 [PLAN.md](PLAN.md)。
+
 ## 功能概览
 
 - 输入一个研究主题，自动检索论文、代码、benchmark
 - 结构化分析并生成 Markdown 调研报告
 - 自动复现论文代码（GitHub 仓库克隆 → 执行 → 错误修复）
 - Reflexion 反思循环 + Best-of-N 采样 + 经验回放，持续提升输出质量
+
+## 实验与评估
+
+当前仓库不仅提供运行入口，也内置了完整的实验与评估能力：
+
+| 方向 | 能力 | 代码位置 |
+|---|---|---|
+| 调研实验 | 主题驱动的论文检索、抽取、反思、报告生成 | [graph.py](graph.py)、[agents/](agents/) |
+| 代码复现实验 | GitHub 克隆、环境隔离、执行计划、报错修复闭环 | [code_agent/](code_agent/) |
+| RL 评估 | 奖励函数、Best-of-N、经验回放 | [rl/](rl/) |
+| 指标与消融 | 报告质量、奖励曲线、配置对比 | [evaluation/](evaluation/) |
+
+已支持的实验任务包括：
+
+| 任务 | 输入 | 输出 |
+|---|---|---|
+| 文献调研 | 一个研究主题 | Markdown 报告 + 结构化论文列表 |
+| 代码复现 | 论文中的 GitHub 仓库链接 | 执行日志 + 修复过程 + 成功/失败状态 |
+| 消融实验 | 多个主题 | 4 种配置的对比结果 |
+
+如果你想直接查看实验结论，可以优先打开 [SOTA_Bench_Agent_Experiment_Report.md](SOTA_Bench_Agent_Experiment_Report.md)。
 
 ## 环境准备
 
@@ -61,6 +86,32 @@ streamlit run app.py
 - 侧边栏可开启 Best-of-N 采样、自动代码复现
 - 历史记录自动保存，支持回看和下载
 
+### 方式一补充：使用 start.sh 一键启动
+
+仓库新增了 [start.sh](start.sh)，可以同时启动 LangGraph dev 和 Streamlit，并自动处理端口占用问题：
+
+```bash
+bash start.sh
+```
+
+脚本默认使用两个端口：
+
+| 服务 | 默认端口 | 说明 |
+|---|---|---|
+| LangGraph dev | 2026 | 用于 LangGraph Studio 连接 |
+| Streamlit | 8502 | 用于打开 Web 界面 |
+
+如果默认端口已经被占用，脚本会从当前端口开始向后顺延，自动寻找可用端口后再启动服务。
+
+启动后终端会输出两个访问地址：
+
+| 入口 | 地址 |
+|---|---|
+| Streamlit | http://localhost:8502 |
+| LangGraph Studio | https://smith.langchain.com/studio/?baseUrl=http://127.0.0.1:2026 |
+
+如果你需要修改端口，可以直接编辑 [start.sh](start.sh) 顶部的 `LG_PORT` 和 `ST_PORT` 两个变量，然后重新执行脚本。
+
 ### 方式二：命令行直接运行
 
 ```bash
@@ -77,18 +128,20 @@ python code_agent/graph.py https://github.com/用户/仓库
 
 对指定 GitHub 仓库执行自动复现：克隆 → 解析 → 生成执行计划 → 执行 → 错误修复循环。
 
+代码复现采用的是 Conda 隔离环境，而不是 Docker 沙箱。每个仓库都会被分配一个独立环境，命名形式为 `sota_repo_{repo_name}`，以减少依赖冲突和环境污染。
+
 ### 方式四：LangGraph Studio 可视化
 
 启动开发服务器：
 
 ```bash
-langgraph dev --no-browser
+bash start.sh
 ```
 
 然后在浏览器打开：
 
 ```
-https://smith.langchain.com/studio/?baseUrl=http://127.0.0.1:2024
+https://smith.langchain.com/studio/?baseUrl=http://127.0.0.1:2026
 ```
 
 可以在 LangSmith Studio 中交互式查看 Graph 结构、运行工作流、调试节点。
@@ -96,8 +149,10 @@ https://smith.langchain.com/studio/?baseUrl=http://127.0.0.1:2024
 如果通过 SSH 远程连接，需要先做端口转发：
 
 ```bash
-ssh -L 2024:127.0.0.1:2024 你的服务器地址
+ssh -L 8502:127.0.0.1:8502 -L 2026:127.0.0.1:2026 你的服务器地址
 ```
+
+如果你已经修改了 [start.sh](start.sh) 里的端口配置，这里的转发参数也要同步修改，保证本地端口和脚本端口一致。
 
 ## 系统架构
 
@@ -146,6 +201,8 @@ Repo Fetcher → Code Parser → Execution Planner → Executor
                                               └──────────────┘
                                               (最多 5 次修复)
 ```
+
+实际实现中，Executor 使用 Conda 运行命令，流程会在 `code_agent/executor.py` 中创建和复用仓库对应环境，然后通过 `conda run` 执行计划中的每一步。
 
 ## 项目结构
 
@@ -217,6 +274,31 @@ sota-bench-agent/
 | 主题相关性 | 0.3 |
 | 代码可用性 | 0.2 |
 | 时效性 | 0.2 |
+
+## 代码说明
+
+下面这段代码展示了主图是如何根据反思结果动态路由的：
+
+```python
+graph.add_conditional_edges(
+       "reflector",
+       decision_node,
+       {
+              "search": "query_planner",
+              "report": "report_writer",
+              "code_reproduction": "select_paper",
+       },
+)
+```
+
+这段代码展示了代码复现阶段的隔离执行方式：
+
+```python
+env_name = _get_env_name(repo_dir)
+result = _run_in_conda(cmd, env_name, repo_dir)
+```
+
+如果你想直接看完整实验过程，请打开 [SOTA_Bench_Agent_Experiment_Report.md](SOTA_Bench_Agent_Experiment_Report.md)。
 
 ## 配置说明
 
