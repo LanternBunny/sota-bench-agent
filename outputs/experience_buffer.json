@@ -41,6 +41,56 @@
   },
   {
     "trajectory": {
+      "topic": "Semantic segmentation of remote sensing images",
+      "queries": [
+        "site:github.com Semantic segmentation of remote sensing images implementation"
+      ],
+      "paper_count": 8
+    },
+    "reward": 0.7077777777777778
+  },
+  {
+    "trajectory": {
+      "topic": "Semantic segmentation",
+      "queries": [
+        "Include more benchmark papers with available code and detailed comparisons of specific methods in semantic segmentation. Focus on papers that provide in-depth analysis of datasets and their characteristics, especially those with recent advancements (2023-2024)."
+      ],
+      "paper_count": 15
+    },
+    "reward": 0.6925555555555555
+  },
+  {
+    "trajectory": {
+      "topic": "Remote sensing image instance segmentation",
+      "queries": [
+        "site:github.com Remote sensing image instance segmentation implementation code"
+      ],
+      "paper_count": 7
+    },
+    "reward": 0.6738412698412698
+  },
+  {
+    "trajectory": {
+      "topic": "Semantic segmentation of remote sensing images",
+      "queries": [
+        "site:github.com Semantic segmentation of remote sensing images implementation"
+      ],
+      "paper_count": 14
+    },
+    "reward": 0.6606349206349206
+  },
+  {
+    "trajectory": {
+      "topic": "Semantic segmentation of remote sensing images",
+      "queries": [
+        "site:github.com Semantic segmentation of remote sensing images implementation"
+      ],
+      "paper_count": 10
+    },
+    "reward": 0.6583333333333333
+  },
+  {
+    "trajectory": {
       "topic": "Semantic segmentation",
       "queries": [
         "Include recent papers (2023-2024) on semantic segmentation, specifically those with non-deep learning approaches, and ensure datasets and code availability are mentioned. Also, focus on papers that provide code implementations."
@@ -48,5 +98,15 @@
       "paper_count": 11
     },
     "reward": 0.6566060606060605
+  },
+  {
+    "trajectory": {
+      "topic": "Semantic segmentation",
+      "queries": [
+        "Include recent papers (2021-2023) on semantic segmentation focusing on novel methods beyond deep learning, such as transformers, attention mechanisms, and hybrid approaches. Also, prioritize papers with publicly available code."
+      ],
+      "paper_count": 14
+    },
+    "reward": 0.6095238095238095
   }
 ]

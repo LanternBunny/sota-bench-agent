@@ -1,5 +1,53 @@
 [
   {
+    "topic": "Remote sensing image instance segmentation",
+    "time": "2026-04-30 17:01",
+    "paper_count": 7,
+    "loop_count": 3,
+    "avg_reward": 0.68,
+    "report_path": "/home/chengyuxuan/Agent/sota-bench-agent/outputs/reports/report_Remote_sensing_image_instance_segmentation_20260430_170119.md"
+  },
+  {
+    "topic": "Semantic segmentation of remote sensing images",
+    "time": "2026-04-30 15:06",
+    "paper_count": 14,
+    "loop_count": 3,
+    "avg_reward": 0.647,
+    "report_path": "/home/chengyuxuan/Agent/sota-bench-agent/outputs/reports/report_Semantic_segmentation_of_remote_sensing_images_20260430_150603.md"
+  },
+  {
+    "topic": "Semantic segmentation of remote sensing images",
+    "time": "2026-04-30 14:53",
+    "paper_count": 8,
+    "loop_count": 3,
+    "avg_reward": 0.716,
+    "report_path": "/home/chengyuxuan/Agent/sota-bench-agent/outputs/reports/report_Semantic_segmentation_of_remote_sensing_images_20260430_145343.md"
+  },
+  {
+    "topic": "Semantic segmentation of remote sensing images",
+    "time": "2026-04-30 13:24",
+    "paper_count": 10,
+    "loop_count": 3,
+    "avg_reward": 0.75,
+    "report_path": "/home/chengyuxuan/Agent/sota-bench-agent/outputs/reports/report_Semantic_segmentation_of_remote_sensing_images_20260430_132412.md"
+  },
+  {
+    "topic": "Semantic segmentation",
+    "time": "2026-04-30 13:13",
+    "paper_count": 15,
+    "loop_count": 3,
+    "avg_reward": 0.635,
+    "report_path": "/home/chengyuxuan/Agent/sota-bench-agent/outputs/reports/report_Semantic_segmentation_20260430_131309.md"
+  },
+  {
+    "topic": "Semantic segmentation",
+    "time": "2026-04-30 12:34",
+    "paper_count": 14,
+    "loop_count": 3,
+    "avg_reward": 0.586,
+    "report_path": "/home/chengyuxuan/Agent/sota-bench-agent/outputs/reports/report_Semantic_segmentation.md"
+  },
+  {
     "topic": "multimodal hallucination detection",
     "time": "2026-04-29 21:13",
     "paper_count": 9,

@@ -34,6 +34,19 @@ def reflector(state: ResearchState) -> dict:
 
     score = float(feedback.get("score", 0.5))
 
+    has_code = any(
+        p.get("code_url") not in (None, "", "unknown")
+        and "github.com" in p.get("code_url", "")
+        for p in papers
+    )
+    if not has_code and loop_count < MAX_SEARCH_LOOPS:
+        feedback["should_continue"] = True
+        if not feedback.get("query_refinement"):
+            topic = state["topic"]
+            feedback["query_refinement"] = f"site:github.com {topic} implementation code"
+        if "代码" not in str(feedback.get("missing", [])):
+            feedback.setdefault("missing", []).append("缺少附带真实 GitHub 代码的论文")
+
     new_queries = []
     if feedback.get("should_continue") and loop_count < MAX_SEARCH_LOOPS:
         refinement = feedback.get("query_refinement", "")

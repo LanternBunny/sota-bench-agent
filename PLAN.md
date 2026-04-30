@@ -610,7 +610,7 @@ sota_bench_agent/
 
 ## 附录：已完成工作记录
 
-> 截至 2026-04-29
+> 截至 2026-04-30
 
 ### Phase 1 完成情况
 
@@ -683,9 +683,38 @@ sota_bench_agent/
 
 ### 待完成项
 
-- [ ] 评估模块（消融实验、奖励曲线可视化）
 - [ ] DPO 偏好微调（需 GPU 资源）
 - [ ] RAG 缓存层（FAISS 向量存储）
 - [ ] LATS 树搜索（替代简单 Reflexion）
 - [ ] Prompt 版本管理与自动选择（prompt_registry.py）
 - [ ] 多主题批量评估
+
+### 评估模块（已完成 ✅）
+
+- [x] `evaluation/metrics.py` — 指标计算
+  - `compute_metrics()`: 从 ResearchState 提取 paper_count / coverage / recency / code_availability / avg_reward / reward_curve
+  - `compute_report_quality()`: LLM-as-Judge 报告质量评估（completeness / accuracy / structure / insight / actionability，1-5 分）
+- [x] `evaluation/ablation.py` — 消融实验运行器
+  - 四种配置：full / no_reflexion / no_best_of_n / no_experience
+  - `run_single()`: 单主题单配置运行，临时 patch config 实现配置切换
+  - `run_ablation()`: 多主题批量运行，结果保存到 `outputs/ablation_results.json`
+  - CLI 入口：`python -m evaluation.ablation "topic1" "topic2"`
+- [x] `evaluation/visualize.py` — matplotlib 可视化
+  - `plot_reward_curve()`: 单次运行奖励曲线（迭代轮次 vs reward）
+  - `plot_ablation_comparison()`: 消融实验分组柱状图（4 配置 × 4 指标）
+  - `plot_experience_trend()`: 跨运行奖励趋势（经验回放效果）
+  - 支持 `save_path` 保存 PNG 和 Streamlit `st.pyplot()` 展示
+- [x] `prompts/report_judge.py` — 报告质量评估 prompt（REPORT_JUDGE_PROMPT）
+- [x] `app.py` 集成评估面板
+  - 侧边栏：消融实验入口（输入主题 → 运行 4 种配置）
+  - 页面底部：评估面板（历史奖励趋势 tab + 消融实验结果 tab）
+  - 调研完成后自动展示当次运行的奖励曲线
+
+### Code URL 虚假链接修复（已完成 ✅）
+
+- [x] 强化 EXTRACT_PROMPT — 明确要求 code_url 只能填搜索结果原文中实际出现的链接，禁止编造
+- [x] info_extractor 双重 URL 验证
+  - `_extract_urls_from_raw()`: 从搜索结果原文正则提取所有 GitHub URL 作为白名单
+  - 白名单过滤：LLM 提取的 code_url 不在白名单中 → 标记为 unknown
+  - `_validate_github_url()`: HTTP HEAD 请求验证仓库是否真实存在
+- [x] query_planner 优化 — GitHub 查询改为 `site:github.com {topic} implementation` 格式

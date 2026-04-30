@@ -1,7 +1,13 @@
 {
   "dependencies": ["."],
   "graphs": {
-    "research_agent": "./graph.py:compile_graph"
+    "research_agent": "./graph.py:compile_graph",
+    "search_agent": "./subgraphs/agents.py:compile_search_agent",
+    "code_agent": "./subgraphs/code_bridge.py:compile_code_bridge",
+    "query_planner": "./subgraphs/agents.py:compile_query_planner",
+    "info_extractor": "./subgraphs/agents.py:compile_info_extractor",
+    "reflector": "./subgraphs/agents.py:compile_reflector",
+    "report_writer": "./subgraphs/agents.py:compile_report_writer"
   },
   "env": ".env"
 }

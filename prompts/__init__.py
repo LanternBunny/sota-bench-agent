@@ -13,6 +13,7 @@ from prompts.report_writer import REPORT_PROMPT
 from prompts.judge import JUDGE_PROMPT
 from prompts.execution_planner import EXECUTION_PLANNER_PROMPT
 from prompts.error_analyzer import ERROR_ANALYZER_PROMPT
+from prompts.report_judge import REPORT_JUDGE_PROMPT
 
 __all__ = [
     "QUERY_PLANNER_PROMPT",
@@ -22,4 +23,5 @@ __all__ = [
     "JUDGE_PROMPT",
     "EXECUTION_PLANNER_PROMPT",
     "ERROR_ANALYZER_PROMPT",
+    "REPORT_JUDGE_PROMPT",
 ]
