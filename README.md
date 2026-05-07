@@ -23,7 +23,7 @@
 | 调研实验 | 主题驱动的论文检索、抽取、反思、报告生成 | [graph.py](graph.py)、[agents/](agents/) |
 | 代码复现实验 | GitHub 克隆、环境隔离、执行计划、报错修复闭环 | [code_agent/](code_agent/) |
 | RL 评估 | 奖励函数、Best-of-N、经验回放 | [rl/](rl/) |
-| 指标与消融 | 报告质量、奖励曲线、配置对比 | [evaluation/](evaluation/) |
+| 指标评估 | 报告质量、奖励曲线、历史趋势 | [evaluation/](evaluation/) |
 
 已支持的实验任务包括：
 
@@ -31,8 +31,6 @@
 |---|---|---|
 | 文献调研 | 一个研究主题 | Markdown 报告 + 结构化论文列表 |
 | 代码复现 | 论文中的 GitHub 仓库链接 | 执行日志 + 修复过程 + 成功/失败状态 |
-| 消融实验 | 多个主题 | 4 种配置的对比结果 |
-
 如果你想直接查看实验结论，可以优先打开 [SOTA_Bench_Agent_Experiment_Report.md](SOTA_Bench_Agent_Experiment_Report.md)。
 
 ## 环境准备

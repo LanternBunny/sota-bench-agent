@@ -46,7 +46,7 @@ Level 2（调研 Agent）→ Level 2.5（反思 + RL 循环）→ Level 3（代�
 | 奖励机制 | 已完成 | `rl/reward.py` |
 | Best-of-N | 已完成 | `rl/best_of_n.py` |
 | 经验回放 | 已完成 | `rl/experience_buffer.py` |
-| 评估模块 | 已完成 | `evaluation/metrics.py`、`evaluation/ablation.py`、`evaluation/visualize.py` |
+| 评估模块 | 已完成 | `evaluation/metrics.py`、`evaluation/visualize.py` |
 
 ---
 
@@ -501,17 +501,6 @@ def plot_reward_curve(reward_history: List[float]):
 - 经验回放是否降低了新主题的搜索轮次（迁移效果）
 - Best-of-N 是否优于单次生成（采样效果）
 
-### 5.4 消融实验
-
-| 实验 | 配置 | 目的 |
-|------|------|------|
-| Full System | Reflexion + Best-of-N + 经验回放 | 完整系统 |
-| - Reflexion | 去掉反思循环 | 验证反思的价值 |
-| - Best-of-N | 只生成 1 个候选 | 验证采样的价值 |
-| - Experience | 不使用经验回放 | 验证记忆的价值 |
-
----
-
 ## 六、开发计划
 
 ### Phase 1：MVP 基础（Day 1-2）
@@ -550,7 +539,7 @@ def plot_reward_curve(reward_history: List[float]):
 - [ ] 实现 Error Analyzer + Patch Generator
 
 **Day 3 下午：评估 + 界面 + 交付**
-- [ ] 运行评估实验（对比基线 + 消融实验）
+- [ ] 运行评估实验（报告质量、奖励曲线、历史趋势）
 - [ ] 绘制奖励曲线
 - [ ] Streamlit 界面
 - [ ] 整理 README、输出示例
@@ -598,7 +587,6 @@ sota_bench_agent/
 ├── evaluation/                 # 评估模块
 │   ├── judge.py                # LLM-as-Judge
 │   ├── metrics.py              # 指标计算
-│   ├── ablation.py             # 消融实验
 │   └── visualize.py            # 奖励曲线可视化
 │
 ├── prompts/                    # Prompt 模板
@@ -650,7 +638,7 @@ sota_bench_agent/
 
 1. **RL 闭环设计**：不是简单的 if-else 重试，而是有奖励信号、经验回放、策略优化的完整 RL 框架
 2. **三层递进**：Reflexion → Best-of-N → 经验回放，从简单到复杂逐层叠加
-3. **可量化评估**：有奖励曲线、消融实验、对比基线，用数据说话
+3. **可量化评估**：有奖励曲线、报告质量指标、历史趋势，用数据说话
 4. **Code Agent 闭环**：代码执行 → 错误分析 → 自动修复 → 重新执行，天然的 RL 环境
 5. **Prompt 进化**：通过奖励信号自动选择最优 prompt 版本，实现无权重微调的"微调"
 
@@ -742,20 +730,13 @@ sota_bench_agent/
 - [x] `evaluation/metrics.py` — 指标计算
   - `compute_metrics()`: 从 ResearchState 提取 paper_count / coverage / recency / code_availability / avg_reward / reward_curve
   - `compute_report_quality()`: LLM-as-Judge 报告质量评估（completeness / accuracy / structure / insight / actionability，1-5 分）
-- [x] `evaluation/ablation.py` — 消融实验运行器
-  - 四种配置：full / no_reflexion / no_best_of_n / no_experience
-  - `run_single()`: 单主题单配置运行，临时 patch config 实现配置切换
-  - `run_ablation()`: 多主题批量运行，结果保存到 `outputs/ablation_results.json`
-  - CLI 入口：`python -m evaluation.ablation "topic1" "topic2"`
 - [x] `evaluation/visualize.py` — matplotlib 可视化
   - `plot_reward_curve()`: 单次运行奖励曲线（迭代轮次 vs reward）
-  - `plot_ablation_comparison()`: 消融实验分组柱状图（4 配置 × 4 指标）
   - `plot_experience_trend()`: 跨运行奖励趋势（经验回放效果）
   - 支持 `save_path` 保存 PNG 和 Streamlit `st.pyplot()` 展示
 - [x] `prompts/report_judge.py` — 报告质量评估 prompt（REPORT_JUDGE_PROMPT）
 - [x] `app.py` 集成评估面板
-  - 侧边栏：消融实验入口（输入主题 → 运行 4 种配置）
-  - 页面底部：评估面板（历史奖励趋势 tab + 消融实验结果 tab）
+  - 页面底部：评估面板（历史报告 tab + 历史奖励趋势 tab）
   - 调研完成后自动展示当次运行的奖励曲线
 
 ### 实验报告输出（已完成 ✅）

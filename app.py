@@ -10,8 +10,7 @@ import sys
 from datetime import datetime
 from graph import compile_graph
 from agents.info_extractor import _is_probable_code_repo
-from evaluation.visualize import plot_reward_curve, plot_ablation_comparison, plot_experience_trend
-from evaluation.ablation import load_ablation_results, run_ablation, ABLATION_CONFIGS
+from evaluation.visualize import plot_reward_curve, plot_experience_trend
 
 # ---------------------------------------------------------------------------
 # Terminal logging — all agent events print to the terminal running streamlit
@@ -260,24 +259,6 @@ with st.sidebar:
             st.caption(f"还有 {len(history) - 10} 条更早的记录")
     else:
         st.caption("暂无历史记录，完成一次调研后会自动保存。")
-
-    st.divider()
-    st.header("📈 消融实验")
-    ablation_topics = st.text_input(
-        "实验主题（逗号分隔）",
-        placeholder="topic1, topic2",
-        key="ablation_topics",
-    )
-    if st.button("运行消融实验", type="secondary"):
-        if ablation_topics.strip():
-            topics = [t.strip() for t in ablation_topics.split(",") if t.strip()]
-            with st.spinner(f"运行消融实验: {len(topics)} 个主题 × {len(ABLATION_CONFIGS)} 种配置..."):
-                run_ablation(topics)
-            st.success("消融实验完成，结果已保存。")
-            st.rerun()
-        else:
-            st.warning("请输入至少一个主题")
-
 
 # ---------------------------------------------------------------------------
 # Main area
@@ -612,7 +593,7 @@ with env_tab:
 st.divider()
 st.header("📚 历史与评估")
 
-history_tab, eval_tab1, eval_tab2 = st.tabs(["历史报告", "历史奖励趋势", "消融实验结果"])
+history_tab, eval_tab1 = st.tabs(["历史报告", "历史奖励趋势"])
 
 with history_tab:
     history_data = load_history()
@@ -661,26 +642,3 @@ with eval_tab1:
         plt.close(fig_trend)
     else:
         st.caption("需要至少 2 次调研记录才能展示趋势图。")
-
-with eval_tab2:
-    ablation_data = load_ablation_results()
-    if ablation_data:
-        st.caption(f"实验时间: {ablation_data.get('timestamp', '?')}  ·  主题: {', '.join(ablation_data.get('topics', []))}")
-        fig_ab = plot_ablation_comparison(ablation_data["results"])
-        st.pyplot(fig_ab)
-        import matplotlib.pyplot as plt
-        plt.close(fig_ab)
-
-        with st.expander("详细数据"):
-            for config_name, runs in ablation_data["results"].items():
-                label = ABLATION_CONFIGS.get(config_name, {}).get("label", config_name)
-                st.markdown(f"**{label}** ({config_name})")
-                valid = [r for r in runs if "error" not in r]
-                if valid:
-                    avg_r = sum(r["avg_reward"] for r in valid) / len(valid)
-                    avg_p = sum(r["paper_count"] for r in valid) / len(valid)
-                    st.caption(f"avg_reward={avg_r:.3f}, avg_papers={avg_p:.1f}")
-                else:
-                    st.caption("全部失败")
-    else:
-        st.caption("暂无消融实验结果。在侧边栏运行消融实验后，结果将在此展示。")

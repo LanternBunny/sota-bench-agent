@@ -4,9 +4,6 @@ import os
 import matplotlib
 matplotlib.use("Agg")
 import matplotlib.pyplot as plt
-import numpy as np
-
-from evaluation.ablation import ABLATION_CONFIGS
 
 plt.rcParams["font.sans-serif"] = ["SimHei", "DejaVu Sans"]
 plt.rcParams["axes.unicode_minus"] = False
@@ -33,53 +30,6 @@ def plot_reward_curve(
     ax.set_xticks(x)
     ax.set_ylim(0, 1.05)
     ax.grid(True, alpha=0.3)
-    fig.tight_layout()
-
-    if save_path:
-        fig.savefig(save_path, dpi=150, bbox_inches="tight")
-    return fig
-
-
-def plot_ablation_comparison(
-    results: dict,
-    save_path: str | None = None,
-) -> plt.Figure:
-    metrics_keys = ["avg_reward", "coverage", "recency", "code_availability"]
-    metric_labels = ["Avg Reward", "Coverage", "Recency", "Code Avail."]
-    config_names = [c for c in results if results[c]]
-
-    data = {}
-    for c in config_names:
-        valid = [r for r in results[c] if "error" not in r]
-        if not valid:
-            data[c] = [0.0] * len(metrics_keys)
-            continue
-        avgs = []
-        for mk in metrics_keys:
-            vals = [r.get(mk, 0) for r in valid]
-            avgs.append(sum(vals) / len(vals) if vals else 0)
-        data[c] = avgs
-
-    x = np.arange(len(metrics_keys))
-    width = 0.8 / max(len(config_names), 1)
-    colors = ["#4A90D9", "#E8734A", "#50C878", "#9B59B6"]
-
-    fig, ax = plt.subplots(figsize=(10, 5))
-    for i, c in enumerate(config_names):
-        label = ABLATION_CONFIGS.get(c, {}).get("label", c)
-        offset = (i - len(config_names) / 2 + 0.5) * width
-        bars = ax.bar(x + offset, data[c], width, label=label, color=colors[i % len(colors)])
-        for bar, val in zip(bars, data[c]):
-            ax.text(bar.get_x() + bar.get_width() / 2, bar.get_height() + 0.01,
-                    f"{val:.2f}", ha="center", va="bottom", fontsize=8)
-
-    ax.set_xticks(x)
-    ax.set_xticklabels(metric_labels, fontsize=10)
-    ax.set_ylabel("Score", fontsize=11)
-    ax.set_title("Ablation Study Comparison", fontsize=13)
-    ax.set_ylim(0, 1.15)
-    ax.legend(loc="upper right", fontsize=9)
-    ax.grid(True, axis="y", alpha=0.3)
     fig.tight_layout()
 
     if save_path:
@@ -153,18 +103,5 @@ if __name__ == "__main__":
     )
     print(f"Saved experience_trend.png")
     plt.close(fig2)
-
-    ablation_path = os.path.join(OUTPUTS_DIR, "ablation_results.json")
-    if os.path.exists(ablation_path):
-        with open(ablation_path, "r") as f:
-            data = json.load(f)
-        fig3 = plot_ablation_comparison(
-            data["results"],
-            save_path=os.path.join(OUTPUTS_DIR, "figures", "ablation_comparison.png"),
-        )
-        print(f"Saved ablation_comparison.png")
-        plt.close(fig3)
-    else:
-        print(f"No ablation results found at {ablation_path}, skipping ablation chart")
 
     print("Done.")
