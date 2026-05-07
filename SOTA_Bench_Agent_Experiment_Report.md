@@ -26,6 +26,7 @@ SOTA-Bench Agent 的目标不是单点问答，而是把一套完整的科研工
 | 路由决策 | [agents/decision.py](agents/decision.py) | 决定继续搜索、复现或写报告 | `reflection_feedback`, `papers` | 分支路由结果 |
 | 报告生成 | [agents/report_writer.py](agents/report_writer.py) | 输出 Markdown 报告 | `extracted_papers` | `final_report` |
 | 代码复现图 | [code_agent/graph.py](code_agent/graph.py) | 组织仓库复现流程 | `repo_url` | `status`, `reward` |
+| 可观测追踪 | [langgraph.json](langgraph.json) + LangSmith | 记录 Graph、LLM、Tool 调用轨迹 | 节点输入输出、状态变化 | Trace、Studio 可视化调试结果 |
 | 代码克隆 | [code_agent/repo_fetcher.py](code_agent/repo_fetcher.py) | 克隆 GitHub 仓库 | `repo_url` | `repo_dir` |
 | 仓库解析 | [code_agent/code_parser.py](code_agent/code_parser.py) | 读取 README、依赖和入口 | `repo_dir` | `readme_content`, `requirements_content`, `entry_file` |
 | 执行规划 | [code_agent/execution_planner.py](code_agent/execution_planner.py) | 生成命令序列 | `readme_content`, `requirements_content` | `execution_plan` |
@@ -47,6 +48,7 @@ SOTA-Bench Agent 的目标不是单点问答，而是把一套完整的科研工
 | Git 克隆超时 | `1200s` | [start.sh](start.sh)、[code_agent/repo_fetcher.py](code_agent/repo_fetcher.py) | 支撑较大仓库浅克隆 |
 | HF 下载重试 | 3 次 | [code_agent/executor.py](code_agent/executor.py) | 处理 Xet/CAS 读超时和临时网络错误 |
 | PyTorch wheel 源 | `cu121` | [code_agent/executor.py](code_agent/executor.py) | 替代 Conda `pytorch-cuda` 缺包场景 |
+| LangSmith 追踪 | 可选开启 | [.env](.env) + [langgraph.json](langgraph.json) | 记录端到端运行轨迹、节点状态和 LLM 调用，辅助调试与汇报 |
 
 ## 2. 总体工作流
 
@@ -384,6 +386,7 @@ Experience Buffer 用于保存高质量轨迹。每次系统运行结束后，�
 | 快速采样模型 | `FAST_MODEL=deepseek-ai/DeepSeek-V3` | [config.py](config.py) |
 | 代码隔离 | Conda 环境 `sota_repo_{repo_name}` | [code_agent/executor.py](code_agent/executor.py) |
 | 输出目录 | `outputs/reports/`, `outputs/repos/` | [README.md](README.md) |
+| 可观测平台 | LangSmith + LangGraph Studio | [langgraph.json](langgraph.json)、[README.md](README.md) |
 
 ### 6.2 运行参数
 
@@ -395,8 +398,28 @@ Experience Buffer 用于保存高质量轨迹。每次系统运行结束后，�
 | Tavily 每轮返回数 | 5 | 每个查询抓取前 5 条结果 |
 | Paper Filter Top-K | 20 | 过滤后最多保留 20 条搜索结果 |
 | Code Extract Window | 前 15 条 | 供 Info Extractor 处理的原始搜索结果数 |
+| `LANGSMITH_TRACING` | `true` 时开启 | 将每次 Graph 运行、LLM 调用、Tool 调用上传到 LangSmith |
+| `LANGSMITH_PROJECT` | 用户配置 | 把本项目运行轨迹归档到指定 LangSmith 项目，便于实验复盘 |
 
-### 6.3 评测任务设置
+### 6.3 LangSmith 与 LangGraph Studio 使用
+
+本项目使用 LangSmith 作为可观测性和调试平台，而不是只把它当成运行日志。原因是 SOTA-Bench Agent 的核心流程是带分支、带回路、带子图的工作流，单靠终端输出很难解释“为什么走到这一步”。LangSmith 可以把每次 LLM 调用、Tool 调用、Graph 节点输入输出和状态变化记录成可追踪的运行轨迹。
+
+在配置层面，`.env` 中可以设置 `LANGSMITH_API_KEY`、`LANGSMITH_TRACING=true` 和 `LANGSMITH_PROJECT`。`langgraph.json` 则把多个可运行图暴露给 LangGraph Studio，包括 `research_agent`、`code_agent`、`query_planner`、`info_extractor`、`reflector` 和 `report_writer`。这样既可以运行完整主图，也可以单独调试某一个节点。
+
+LangSmith 在实验中的主要用途如下：
+
+| 用途 | 具体观察对象 | 实验价值 |
+|---|---|---|
+| 端到端轨迹追踪 | 从 Query Planner 到 Report Writer 或 Code Agent 的完整路径 | 解释一次研究任务的实际执行顺序 |
+| 节点级调试 | 每个节点的输入状态、Prompt、模型输出和解析结果 | 定位 JSON 解析失败、抽取幻觉、路由异常等问题 |
+| 分支与回路观察 | `reflector -> decision_node` 的继续搜索、写报告、代码复现分支 | 验证 Graph 控制逻辑是否符合设计 |
+| Code Agent 排错 | 执行计划、失败命令、错误类型、修复建议、再次执行结果 | 复盘自动复现为什么失败以及系统如何修复 |
+| 汇报可视化 | LangGraph Studio 中的图结构和 LangSmith Trace 时间线 | 在 PPT 中展示系统不是线性脚本，而是可观察的智能体工作流 |
+
+从实验方法角度看，LangSmith 解决的是“可解释性”和“可复盘性”问题。最终报告只能说明系统产出了什么，而 Trace 能说明系统怎样产出、在哪个节点做了什么判断、失败后是否进入修复回路。对于答辩或项目汇报，可以用 LangGraph Studio 展示图结构，用 LangSmith Trace 展示一次真实运行的节点时间线，再结合输出报告和复现日志说明系统闭环。
+
+### 6.4 评测任务设置
 
 本项目当前采用的评测对象并不是单一基准集，而是“主题驱动”的研究任务。也就是说，实验输入是一个研究主题，系统自动完成检索、抽取、反思、报告和复现。
 
@@ -406,7 +429,7 @@ Experience Buffer 用于保存高质量轨迹。每次系统运行结束后，�
 | 代码复现 | 论文中的 GitHub 仓库链接 | 环境构建、执行计划、修复闭环 |
 | 经验复用 | 新主题与历史成功轨迹 | 查询策略是否被经验回放改善 |
 
-### 6.4 关键实现片段
+### 6.5 关键实现片段
 
 #### 主图的条件路由
 
@@ -441,6 +464,23 @@ return round(total, 3)
 ```
 
 奖励函数不是黑盒，而是显式组合完整度、相关性、代码可用性和时效性。
+
+#### LangGraph Studio 暴露多个可调试图
+
+```json
+{
+  "graphs": {
+    "research_agent": "./graph.py:compile_graph",
+    "code_agent": "./subgraphs/code_bridge.py:compile_code_bridge",
+    "query_planner": "./subgraphs/agents.py:compile_query_planner",
+    "info_extractor": "./subgraphs/agents.py:compile_info_extractor",
+    "reflector": "./subgraphs/agents.py:compile_reflector",
+    "report_writer": "./subgraphs/agents.py:compile_report_writer"
+  }
+}
+```
+
+这段配置说明系统不仅能跑完整主流程，也能把关键 Agent 单独暴露给 Studio 调试。配合 LangSmith Trace，可以直接观察某个节点的 prompt、输入状态、模型输出和异常位置。
 
 ## 7. 运行结果
 
@@ -559,6 +599,14 @@ if result.returncode == 0:
 
 这段代码说明成功执行后并不会立即结束，而是继续推进到下一个命令；这也是复现闭环能够连续运行的基础。
 
+### 8.5 案例五：用 LangSmith 复盘一次失败路径
+
+以 LLaVA 复现失败为例，如果只看最终 `reproduction_report.md`，只能知道某一步失败；但通过 LangSmith Trace，可以把失败路径拆成更清晰的因果链：Execution Planner 生成了哪些命令，Executor 实际在哪个 Conda 环境执行，失败命令的 stderr 是什么，Error Analyzer 收到了什么 `error_type`，Patch Generator 是否替换了当前命令。
+
+这种复盘方式对实验迭代非常重要。比如之前出现过 `load_pretrained_model()` 参数缺失的问题，Trace 可以帮助定位错误不是出在模型下载本身，而是 Planner 把项目内部加载函数误当成下载函数。再比如 `pytorch-cuda=12.1` 安装失败，Trace 中可以看到它先被分类为依赖求解问题，然后被确定性规则改写为 PyTorch wheel 安装。
+
+因此，LangSmith 在本项目中承担了“实验显微镜”的角色：它不是改变算法输出的模块，而是让每一次 Agent 决策都可以被观察、解释和复盘。这一点对汇报尤其有价值，因为它可以证明系统具备工程可控性，而不是只展示一个偶然成功的最终结果。
+
 ## 9. 状态与控制设计
 
 整个系统的关键不是单个节点，而是状态如何流动。Research Graph 和 Code Agent 都围绕状态字典工作，节点之间通过字段传递信息，而不是通过函数参数硬编码。
@@ -611,6 +659,20 @@ Code Agent 的关键状态包括：`repo_url`、`repo_dir`、`readme_content`、
 | 可观测性 | 中间产物难统一记录 | 状态字段统一保存每个节点输出 |
 
 这也是报告中强调“工作流智能体”的原因：系统能力来自节点能力和图结构共同作用，而不是单个大模型调用。
+
+### 9.4 可观测性如何支撑 Graph 设计
+
+Graph 结构只有在状态可观测时才真正有工程价值。LangSmith 和 LangGraph Studio 正好补上了这一层：Studio 展示图中有哪些节点、边和可运行子图，LangSmith 记录每次运行中这些节点实际收到了什么输入、输出了什么结果、花费了多长时间、是否发生异常。
+
+本项目的可观测性设计可以概括为三层：
+
+| 层次 | 观察内容 | 对应问题 |
+|---|---|---|
+| 图结构层 | 节点、边、条件路由、子图入口 | 系统设计是否清晰，是否存在不必要耦合 |
+| 状态流层 | `topic`、`search_queries`、`extracted_papers`、`execution_plan`、`error_type` 等字段变化 | 每一步为什么这样决策，状态是否被正确更新 |
+| 调用细节层 | Prompt、LLM 输出、Tool 结果、stderr/stdout | 具体失败来自提示词、模型输出、外部 API 还是执行环境 |
+
+这套可观测性机制让实验不再依赖事后猜测。出现问题时，可以先看 Graph 是否走错分支，再看状态字段是否异常，最后看具体 LLM 或命令调用是否失败。对于一个包含调研、复现和修复闭环的系统，这种分层调试能力是保证系统可维护性的关键。
 
 ## 10. 设计亮点与不足
 
