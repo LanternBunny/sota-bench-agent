@@ -81,6 +81,16 @@
   },
   {
     "trajectory": {
+      "topic": "visual Instruction Tuning",
+      "queries": [
+        "site:github.com visual Instruction Tuning implementation OR site:paperswithcode.com visual Instruction Tuning code"
+      ],
+      "paper_count": 9
+    },
+    "reward": 0.6584800384800384
+  },
+  {
+    "trajectory": {
       "topic": "Semantic segmentation of remote sensing images",
       "queries": [
         "site:github.com Semantic segmentation of remote sensing images implementation"
@@ -91,6 +101,16 @@
   },
   {
     "trajectory": {
+      "topic": "Remote sensing image instance",
+      "queries": [
+        "site:github.com Remote sensing image instance segmentation implementation"
+      ],
+      "paper_count": 9
+    },
+    "reward": 0.6575372775372775
+  },
+  {
+    "trajectory": {
       "topic": "Semantic segmentation",
       "queries": [
         "Include recent papers (2023-2024) on semantic segmentation, specifically those with non-deep learning approaches, and ensure datasets and code availability are mentioned. Also, focus on papers that provide code implementations."
@@ -98,6 +118,36 @@
       "paper_count": 11
     },
     "reward": 0.6566060606060605
+  },
+  {
+    "trajectory": {
+      "topic": "visual Instruction Tuning",
+      "queries": [
+        "site:github.com visual Instruction Tuning implementation OR site:paperswithcode.com visual Instruction Tuning code"
+      ],
+      "paper_count": 12
+    },
+    "reward": 0.653542647828362
+  },
+  {
+    "trajectory": {
+      "topic": "visual Instruction Tuning",
+      "queries": [
+        "site:github.com visual Instruction Tuning implementation OR site:paperswithcode.com visual Instruction Tuning code"
+      ],
+      "paper_count": 17
+    },
+    "reward": 0.6487667887667887
+  },
+  {
+    "trajectory": {
+      "topic": "visual  Instruction Tuning",
+      "queries": [
+        "site:github.com visual Instruction Tuning implementation OR site:paperswithcode.com visual Instruction Tuning code OR visual Instruction Tuning github"
+      ],
+      "paper_count": 12
+    },
+    "reward": 0.6316288156288157
   },
   {
     "trajectory": {

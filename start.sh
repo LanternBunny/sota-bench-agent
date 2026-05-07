@@ -6,6 +6,16 @@ conda activate langgraph 2>/dev/null || source activate langgraph 2>/dev/null
 LG_PORT=2026
 ST_PORT=8502
 
+export CODE_AGENT_COMMAND_TIMEOUT=${CODE_AGENT_COMMAND_TIMEOUT:-3600}
+export CODE_AGENT_GIT_CLONE_TIMEOUT=${CODE_AGENT_GIT_CLONE_TIMEOUT:-1200}
+export PIP_INDEX_URL=${PIP_INDEX_URL:-https://pypi.tuna.tsinghua.edu.cn/simple}
+export PIP_TRUSTED_HOST=${PIP_TRUSTED_HOST:-pypi.tuna.tsinghua.edu.cn}
+export PIP_DEFAULT_TIMEOUT=${PIP_DEFAULT_TIMEOUT:-3000}
+export PIP_RETRIES=${PIP_RETRIES:-10}
+export HF_ENDPOINT=${HF_ENDPOINT:-https://hf-mirror.com}
+export CODE_AGENT_GIT_SSL_BACKEND=${CODE_AGENT_GIT_SSL_BACKEND:-gnutls}
+export CODE_AGENT_CONDA_CHANNELS=${CODE_AGENT_CONDA_CHANNELS:-https://mirrors.tuna.tsinghua.edu.cn/anaconda/pkgs/main,https://mirrors.tuna.tsinghua.edu.cn/anaconda/pkgs/r,https://mirrors.tuna.tsinghua.edu.cn/anaconda/cloud/conda-forge}
+
 # --- 清理旧进程 ---
 if lsof -i :$LG_PORT -sTCP:LISTEN &>/dev/null; then
     OLD_PID=$(lsof -ti :$LG_PORT -sTCP:LISTEN | head -1)

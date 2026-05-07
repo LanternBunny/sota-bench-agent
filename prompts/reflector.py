@@ -1,4 +1,4 @@
-REFLECT_PROMPT = """你是一个 AI 研究调研质量评审专家。评估以下论文集合的质量。
+REFLECT_PROMPT = """你是一个 AI 研究调研质量评审专家，必须重点检查论文是否附带 GitHub/open-source 代码链接。评估以下论文集合的质量。
 
 研究主题：{topic}
 当前搜索轮次：{loop_count}
@@ -21,6 +21,6 @@ REFLECT_PROMPT = """你是一个 AI 研究调研质量评审专家。评估以�
 {{
     "score": 0.0到1.0之间的浮点数,
     "missing": ["缺失的维度列表"],
-    "query_refinement": "改进的搜索建议（英文）",
+    "query_refinement": "改进的搜索建议（英文，强调必须搜索 GitHub/PapersWithCode 等代码来源）",
     "should_continue": true或false
 }}"""

@@ -14,6 +14,8 @@ from subgraphs.agents import (
 )
 from subgraphs.code_bridge import build_code_bridge_graph
 from rl.experience_buffer import experience_buffer
+from agents.pdf_agent import pdf_agent
+from agents.info_extractor import _is_probable_code_repo
 
 
 def save_experience(state: ResearchState) -> dict:
@@ -30,19 +32,58 @@ def save_experience(state: ResearchState) -> dict:
     return {}
 
 
-def _select_paper(state: ResearchState) -> dict:
-    papers = state.get("extracted_papers", [])
-    papers_with_code = [
-        p for p in papers
-        if p.get("code_url") not in (None, "", "unknown")
-    ]
-    if not papers_with_code:
-        return {
-            "reproduction_status": "no_code_available",
-            "execution_logs": "",
-        }
-    best = max(papers_with_code, key=lambda p: p.get("relevance_score", 0))
-    return {"target_repo_url": best["code_url"]}
+def prepare_code_candidates(state: ResearchState) -> dict:
+    candidates = []
+    seen = set()
+    for paper in state.get("extracted_papers", []):
+        code_url = paper.get("code_url", "")
+        if (
+            not code_url
+            or code_url == "unknown"
+            or "github.com" not in code_url
+            or not _is_probable_code_repo(code_url)
+            or code_url in seen
+        ):
+            continue
+        seen.add(code_url)
+        candidates.append({
+            "title": paper.get("title", "Unknown"),
+            "code_url": code_url,
+            "method": paper.get("method", ""),
+            "dataset": paper.get("datasets", paper.get("dataset", "")),
+            "relevance_score": paper.get("relevance_score", 0),
+        })
+    candidates.sort(key=lambda item: item.get("relevance_score", 0), reverse=True)
+
+    target_repo_url = state.get("target_repo_url", "")
+    if not target_repo_url and state.get("auto_reproduce_code") and candidates:
+        target_repo_url = candidates[0].get("code_url", "")
+
+    result = {"code_candidates": candidates}
+    if target_repo_url:
+        result["target_repo_url"] = target_repo_url
+    return result
+
+
+def route_after_code_candidates(state: ResearchState) -> str:
+    if state.get("target_repo_url"):
+        return "reproduce"
+    return "report"
+
+
+def run_code_reproduction(state: ResearchState) -> dict:
+    app = build_code_bridge_graph().compile()
+    result = app.invoke({
+        "topic": state.get("topic", ""),
+        "workspace_name": state.get("workspace_name") or state.get("topic", ""),
+        "base_env": state.get("base_env", ""),
+        "target_repo_url": state.get("target_repo_url", ""),
+    })
+    return {
+        "reproduction_status": result.get("reproduction_status", result.get("status", "unknown")),
+        "code_reward_scores": result.get("code_reward_scores", [result.get("reward", 0.0)]),
+        "execution_logs": result.get("execution_logs", []),
+    }
 
 
 def build_research_graph(use_best_of_n: bool = True) -> StateGraph:
@@ -59,8 +100,9 @@ def build_research_graph(use_best_of_n: bool = True) -> StateGraph:
 
     graph.add_node("reflector", build_reflector_graph().compile())
     graph.add_node("report_writer", build_report_writer_graph().compile())
-    graph.add_node("select_paper", _select_paper)
-    graph.add_node("code_reproduction", build_code_bridge_graph().compile())
+    graph.add_node("pdf_agent", pdf_agent)
+    graph.add_node("prepare_code_candidates", prepare_code_candidates)
+    graph.add_node("code_reproduction", run_code_reproduction)
     graph.add_node("save_experience", save_experience)
 
     graph.add_edge(START, "query_planner")
@@ -74,12 +116,19 @@ def build_research_graph(use_best_of_n: bool = True) -> StateGraph:
         decision_node,
         {
             "search": "query_planner",
-            "report": "report_writer",
-            "code_reproduction": "select_paper",
+            "report": "pdf_agent",
         },
     )
 
-    graph.add_edge("select_paper", "code_reproduction")
+    graph.add_edge("pdf_agent", "prepare_code_candidates")
+    graph.add_conditional_edges(
+        "prepare_code_candidates",
+        route_after_code_candidates,
+        {
+            "reproduce": "code_reproduction",
+            "report": "report_writer",
+        },
+    )
     graph.add_edge("code_reproduction", "report_writer")
     graph.add_edge("report_writer", "save_experience")
     graph.add_edge("save_experience", END)

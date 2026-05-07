@@ -1,0 +1,20 @@
+[transformers] PyTorch was not found. Models won't be available and only tokenizers, configuration and file/data utilities can be used.
+[CodeAgentJob] repo_url=https://github.com/haotian-liu/LLaVA.git
+[CodeAgentJob] workspace_name=manual_reproduction
+[CodeAgentJob] base_env=sota_repo_llava
+[CodeAgent] Cloning https://github.com/haotian-liu/LLaVA.git -> /home/chengyuxuan/Agent/sota-bench-agent/outputs/repos/manual_reproduction/LLaVA (timeout=1200s)
+[CodeAgent] git clone failed: Cloning into '/home/chengyuxuan/Agent/sota-bench-agent/outputs/repos/manual_reproduction/LLaVA'...
+fatal: unable to access 'https://github.com/haotian-liu/LLaVA.git/': Empty reply from server
+fatal: unable to access 'https://github.com/haotian-liu/LLaVA.git/': Failed to connect to github.com port 443 after 136470 ms: Connection timed out
+fatal: unable to access 'https://github.com/haotian-liu/LLaVA.git/': Failed to connect to github.com port 443 after 135145 ms: Connection timed out
+fatal: unabl
+[CodeAgentJob] node=repo_fetcher
+git clone failed: Cloning into '/home/chengyuxuan/Agent/sota-bench-agent/outputs/repos/manual_reproduction/LLaVA'...
+fatal: unable to access 'https://github.com/haotian-liu/LLaVA.git/': Empty reply from server
+fatal: unable to access 'https://github.com/haotian-liu/LLaVA.git/': Failed to connect to github.com port 443 after 136470 ms: Connection timed out
+fatal: unable to access 'https://github.com/haotian-liu/LLaVA.git/': Failed to connect to github.com port 443 after 135145 ms: Connection timed out
+fatal: unabl
+[CodeAgentJob] node=finalize_failure
+Gave up after 0 fix attempts
+[CodeAgentJob] final={"status": "failed", "reward": -0.5, "execution_logs": ["Gave up after 0 fix attempts"]}
+[CodeAgentJob] finished status=failed

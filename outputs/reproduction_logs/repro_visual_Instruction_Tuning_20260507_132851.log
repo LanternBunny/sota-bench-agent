@@ -1,0 +1,19 @@
+[transformers] PyTorch was not found. Models won't be available and only tokenizers, configuration and file/data utilities can be used.
+[CodeAgentJob] repo_url=https://github.com/haotian-liu/LLaVA
+[CodeAgentJob] workspace_name=visual Instruction Tuning
+[CodeAgentJob] base_env=sota_repo_LLaVA
+[CodeAgent] Removing existing repo dir: /home/chengyuxuan/Agent/sota-bench-agent/outputs/repos/visual_Instruction_Tuning/LLaVA
+[CodeAgent] Cloning https://github.com/haotian-liu/LLaVA.git -> /home/chengyuxuan/Agent/sota-bench-agent/outputs/repos/visual_Instruction_Tuning/LLaVA (timeout=1200s)
+[CodeAgent] git clone failed: Cloning into '/home/chengyuxuan/Agent/sota-bench-agent/outputs/repos/visual_Instruction_Tuning/LLaVA'...
+error: RPC failed; curl 28 Failed to connect to github.com port 443 after 135635 ms: Connection timed out
+fatal: expected flush after ref listing
+
+[CodeAgentJob] node=repo_fetcher
+git clone failed: Cloning into '/home/chengyuxuan/Agent/sota-bench-agent/outputs/repos/visual_Instruction_Tuning/LLaVA'...
+error: RPC failed; curl 28 Failed to connect to github.com port 443 after 135635 ms: Connection timed out
+fatal: expected flush after ref listing
+
+[CodeAgentJob] node=finalize_failure
+Gave up after 0 fix attempts
+[CodeAgentJob] final={"status": "failed", "reward": -0.5, "execution_logs": ["Gave up after 0 fix attempts"]}
+[CodeAgentJob] finished status=failed

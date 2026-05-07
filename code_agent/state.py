@@ -4,6 +4,8 @@ import operator
 
 class CodeAgentState(TypedDict, total=False):
     repo_url: str
+    workspace_name: str
+    base_env: str
     repo_dir: str
     readme_content: str
     requirements_content: str

@@ -12,6 +12,7 @@
 - 结构化分析并生成 Markdown 调研报告
 - 自动复现论文代码（GitHub 仓库克隆 → 执行 → 错误修复）
 - Reflexion 反思循环 + Best-of-N 采样 + 经验回放，持续提升输出质量
+- 面向国内网络环境加固复现链路：Conda/PyPI/Hugging Face 镜像、PyTorch CUDA wheel 自动改写、HF 下载超时自动重试
 
 ## 实验与评估
 
@@ -130,6 +131,14 @@ python code_agent/graph.py https://github.com/用户/仓库
 
 代码复现采用的是 Conda 隔离环境，而不是 Docker 沙箱。每个仓库都会被分配一个独立环境，命名形式为 `sota_repo_{repo_name}`，以减少依赖冲突和环境污染。
 
+复现执行器会自动处理常见工程环境问题：
+
+- 禁止执行计划输出 `conda activate`、`conda init`、`conda create` 等无效命令，由执行器统一创建并通过 `conda run` 进入隔离环境
+- 普通 `pip install` 自动注入清华 PyPI 镜像、超时和重试参数
+- `conda install pytorch-cuda=...` 自动改写为 PyTorch wheel 安装，避免 Conda 镜像缺包
+- Hugging Face 下载默认使用 `HF_ENDPOINT=https://hf-mirror.com`，设置 `HF_HUB_DISABLE_XET=1`，并对 Xet/CAS 读超时自动重试
+- Error Analyzer 会在 TypeError 涉及本地函数签名时读取源码上下文，减少凭空猜参数导致的错误修复
+
 ### 方式四：LangGraph Studio 可视化
 
 启动开发服务器：
@@ -228,6 +237,7 @@ sota-bench-agent/
 ├── code_agent/             # 代码复现 Agent
 │   ├── graph.py            # Code Agent 子图定义
 │   ├── state.py            # 子图状态
+│   ├── run_reproduction.py # 单仓库复现命令行入口
 │   ├── repo_fetcher.py     # 仓库克隆
 │   ├── code_parser.py      # 代码解析
 │   ├── execution_planner.py# 执行计划生成
@@ -251,6 +261,7 @@ sota-bench-agent/
 │
 └── outputs/                # 输出目录
     ├── reports/            # 生成的调研报告
+    ├── reproduction_logs/   # UI/命令行复现日志
     ├── experiments/        # 实验结果
     ├── repos/              # 克隆的代码仓库
     ├── reward_curves/      # 奖励曲线
@@ -309,6 +320,17 @@ result = _run_in_conda(cmd, env_name, repo_dir)
 | `MAX_SEARCH_LOOPS` | 3 | 最大搜索反思循环次数 |
 | `MAX_CODE_FIX_LOOPS` | 5 | 代码修复最大尝试次数 |
 | `BEST_OF_N` | 3 | Best-of-N 采样候选数 |
+
+代码复现相关环境变量：
+
+| 变量 | 默认值 | 说明 |
+|------|--------|------|
+| `CODE_AGENT_COMMAND_TIMEOUT` | `3600` | 单条复现命令超时时间 |
+| `CODE_AGENT_GIT_CLONE_TIMEOUT` | `1200` | Git 克隆超时时间 |
+| `CODE_AGENT_CONDA_CHANNELS` | 清华 Conda 镜像 | Conda 安装/建环境 channel |
+| `CODE_AGENT_PYTORCH_WHEEL_INDEX` | `https://download.pytorch.org/whl/cu121` | PyTorch CUDA wheel 源 |
+| `CODE_AGENT_HF_DOWNLOAD_RETRIES` | `3` | Hugging Face 下载失败重试次数 |
+| `HF_ENDPOINT` | `https://hf-mirror.com` | Hugging Face 镜像地址 |
 
 ## 输出示例
 

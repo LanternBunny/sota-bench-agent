@@ -249,6 +249,9 @@ class _RWState(TypedDict, total=False):
     extracted_papers: list[dict]
     reward_scores: Annotated[list[float], operator.add]
     loop_count: int
+    target_repo_url: str
+    reproduction_status: str
+    code_reward_scores: Annotated[list[float], operator.add]
     final_report: str
     _prompt: str
     _raw_response: str
@@ -289,6 +292,16 @@ def _rw_parse_output(state: _RWState) -> dict:
     appendix += f"- 反思奖励分数：{reward_summary}\n"
     if reward_summary:
         appendix += f"- 平均奖励：{sum(reward_summary) / len(reward_summary):.2f}\n"
+
+    target_repo_url = state.get("target_repo_url", "")
+    reproduction_status = state.get("reproduction_status", "")
+    if target_repo_url or reproduction_status:
+        appendix += "\n## 附录：代码复现\n\n"
+        appendix += f"- 目标仓库：{target_repo_url or '无'}\n"
+        appendix += f"- 复现状态：{reproduction_status or '未执行'}\n"
+        code_rewards = state.get("code_reward_scores", [])
+        if code_rewards:
+            appendix += f"- 代码复现奖励：{code_rewards}\n"
 
     return {"final_report": stripped + appendix}
 

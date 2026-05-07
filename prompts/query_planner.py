@@ -4,7 +4,7 @@ QUERY_PLANNER_PROMPT = """你是一个 AI 研究调研专家。给定一个研�
 1. 综述类查询（survey / review）
 2. Benchmark / 数据集查询
 3. 最新进展查询（加年份限定）
-4. GitHub 开源代码查询（使用 "site:github.com {topic} implementation" 格式，确保搜到真实仓库）
+4. GitHub/PapersWithCode 开源代码查询（使用 "site:github.com {topic} implementation" 格式，并明确检索 PapersWithCode，确保搜到真实仓库）
 5. 核心方法/技术查询
 
 研究主题：{topic}

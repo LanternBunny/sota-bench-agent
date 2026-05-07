@@ -1,0 +1,18 @@
+[transformers] PyTorch was not found. Models won't be available and only tokenizers, configuration and file/data utilities can be used.
+[CodeAgentJob] repo_url=https://github.com/hhhjuice/cvprw26
+[CodeAgentJob] workspace_name=manual_reproduction
+[CodeAgentJob] base_env=bright_cvprw26
+[CodeAgent] Cloning https://github.com/hhhjuice/cvprw26.git -> /home/chengyuxuan/Agent/sota-bench-agent/outputs/repos/manual_reproduction/cvprw26 (timeout=1200s)
+[CodeAgent] git clone failed: Cloning into '/home/chengyuxuan/Agent/sota-bench-agent/outputs/repos/manual_reproduction/cvprw26'...
+fatal: Unsupported SSL backend 'openssl'. Supported SSL backends:
+	gnutls
+
+[CodeAgentJob] node=repo_fetcher
+git clone failed: Cloning into '/home/chengyuxuan/Agent/sota-bench-agent/outputs/repos/manual_reproduction/cvprw26'...
+fatal: Unsupported SSL backend 'openssl'. Supported SSL backends:
+	gnutls
+
+[CodeAgentJob] node=finalize_failure
+Gave up after 0 fix attempts
+[CodeAgentJob] final={"status": "failed", "reward": -0.5, "execution_logs": ["Gave up after 0 fix attempts"]}
+[CodeAgentJob] finished status=failed

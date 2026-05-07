@@ -16,9 +16,11 @@ def code_parser(state: CodeAgentState) -> dict:
             break
 
     requirements = ""
+    dependency_file = ""
     for name in ["requirements.txt", "setup.py", "pyproject.toml", "environment.yml"]:
         path = os.path.join(repo_dir, name)
         if os.path.exists(path):
+            dependency_file = name
             with open(path, "r", encoding="utf-8", errors="ignore") as f:
                 requirements = f.read()[:3000]
             break
@@ -55,10 +57,22 @@ def code_parser(state: CodeAgentState) -> dict:
         for f in files[:15]:
             structure_lines.append(f"{indent}  {f}")
 
+    if not entry_file and not dependency_file:
+        return {
+            "status": "failed",
+            "readme_content": readme,
+            "requirements_content": requirements,
+            "entry_file": entry_file,
+            "repo_structure": "\n".join(structure_lines[:80]),
+            "execution_logs": [
+                "Non-reproducible repository: no Python entry file or dependency/project config found"
+            ],
+        }
+
     return {
         "readme_content": readme,
         "requirements_content": requirements,
         "entry_file": entry_file,
         "repo_structure": "\n".join(structure_lines[:80]),
-        "execution_logs": [f"Parsed repo: entry={entry_file}, has_readme={bool(readme)}, has_requirements={bool(requirements)}"],
+        "execution_logs": [f"Parsed repo: entry={entry_file}, dependency_file={dependency_file}, has_readme={bool(readme)}"],
     }

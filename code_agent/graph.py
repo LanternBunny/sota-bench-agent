@@ -20,6 +20,8 @@ def _route_after_exec(state: CodeAgentState) -> str:
     status = state.get("status", "")
     if status == "success":
         return "done"
+    if status == "failed":
+        return "give_up"
     if status == "error":
         fix_count = state.get("fix_count", 0)
         if fix_count >= state.get("max_fixes", MAX_CODE_FIX_LOOPS):
@@ -30,6 +32,18 @@ def _route_after_exec(state: CodeAgentState) -> str:
     if step < len(plan):
         return "next_step"
     return "done"
+
+
+def _route_after_parse(state: CodeAgentState) -> str:
+    if state.get("status") == "failed":
+        return "give_up"
+    return "plan"
+
+
+def _route_after_plan(state: CodeAgentState) -> str:
+    if state.get("status") == "failed":
+        return "give_up"
+    return "execute"
 
 
 def _finalize_success(state: CodeAgentState) -> dict:
@@ -71,8 +85,22 @@ def build_code_agent_graph() -> StateGraph:
         },
     )
 
-    graph.add_edge("code_parser", "execution_planner")
-    graph.add_edge("execution_planner", "executor")
+    graph.add_conditional_edges(
+        "code_parser",
+        _route_after_parse,
+        {
+            "plan": "execution_planner",
+            "give_up": "finalize_failure",
+        },
+    )
+    graph.add_conditional_edges(
+        "execution_planner",
+        _route_after_plan,
+        {
+            "execute": "executor",
+            "give_up": "finalize_failure",
+        },
+    )
 
     graph.add_conditional_edges(
         "executor",

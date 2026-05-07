@@ -22,7 +22,7 @@ SOTA-Bench Agent 是一个面向 AI 研究主题的多级智能体系统：
 | 能力 | 实现方式 | 对应模块 |
 |------|---------|---------|
 | Planning | Query Planner + Execution Planner | 查询规划 / 执行规划 |
-| Tool Use | Search API / Docker / Git | 搜索 / 代码执行 |
+| Tool Use | Tavily / Conda / Git / Hugging Face | 搜索 / 代码执行 / 模型下载 |
 | Memory | State + 向量存储 + 经验回放 | 状态管理 / 长期记忆 |
 | Reflection | Reflexion 循环 + LLM-as-Judge | 反思模块 |
 | Self-Improvement | 奖励信号 + 经验回放 + Best-of-N | RL 模块 |
@@ -42,6 +42,7 @@ Level 2（调研 Agent）→ Level 2.5（反思 + RL 循环）→ Level 3（代�
 | 反思循环 | 已完成 | Reflector + Decision Node |
 | 报告生成 | 已完成 | Report Writer + Markdown 输出 |
 | 代码复现闭环 | 已完成 | Repo Fetcher → Executor → Patch Generator |
+| 复现鲁棒性加固 | 已完成 | 镜像注入、PyTorch wheel 改写、HF 下载重试、源码上下文错误分析 |
 | 奖励机制 | 已完成 | `rl/reward.py` |
 | Best-of-N | 已完成 | `rl/best_of_n.py` |
 | 经验回放 | 已完成 | `rl/experience_buffer.py` |
@@ -156,7 +157,7 @@ class ResearchState(TypedDict, total=False):
 ```
                     ┌─────────────────────────┐
                     │     Environment          │
-                    │  (搜索引擎 / 代码沙箱)     │
+                    │  (搜索引擎 / 代码执行环境) │
                     └────────┬────────────────┘
                              │ observation
                              ▼
@@ -403,6 +404,21 @@ def search_with_rag(query: str, state: ResearchState):
 
 ---
 
+### 4.4 复现 Prompt 与执行策略迭代（已落地）
+
+LLaVA 等大模型仓库暴露出三个典型问题：执行计划会生成无效 Conda 激活命令，模型下载命令会误用项目内部函数，错误修复会在没有源码依据时猜测函数参数。针对这些问题，当前实现把 prompt 约束和执行器规则合并使用：
+
+| 问题 | Prompt 约束 | 执行器/分析器兜底 |
+|------|-------------|-------------------|
+| `conda activate/init/create` 在自动环境中无效 | Execution Planner 明确禁止输出这些命令 | `_is_valid_command` 过滤无效计划，Executor 统一 `conda run` |
+| HF 模型下载误用 `load_*` 函数 | 要求优先 `HF_ENDPOINT=https://hf-mirror.com huggingface-cli download ...` | 注入 `HF_HUB_DISABLE_XET=1`，Xet/CAS 超时自动重试 |
+| Conda 镜像缺少 `pytorch-cuda` | 禁止用 Conda 安装 `pytorch-cuda` | 自动改写为 `pip install torch torchvision torchaudio --index-url ...` |
+| TypeError 缺本地函数参数 | Error Analyzer 必须参考源码上下文 | `_extract_source_context` 读取函数定义片段传入 prompt |
+
+这体现了项目的一个重要工程原则：LLM 负责生成和解释，执行器负责强约束和确定性改写，二者共同减少复现链路中的幻觉和环境波动。
+
+---
+
 ## 五、评估策略
 
 ### 5.1 调研 Agent 评估
@@ -530,7 +546,7 @@ def plot_reward_curve(reward_history: List[float]):
 - [ ] 实现 Repo Fetcher（git clone）
 - [ ] 实现 Code Parser（解析 README/requirements）
 - [ ] 实现 Execution Planner
-- [ ] 实现 Code Executor（Docker 沙箱）
+- [ ] 实现 Code Executor（Conda 隔离环境）
 - [ ] 实现 Error Analyzer + Patch Generator
 
 **Day 3 下午：评估 + 界面 + 交付**
@@ -610,7 +626,7 @@ sota_bench_agent/
 | 搜索 API | Tavily Search | 专为 Agent 设计，返回结构化结果 |
 | LLM | DeepSeek / 智谱 / OpenAI | 按需选择，支持多模型切换 |
 | 前端 | Streamlit | 快速原型，适合演示 |
-| 代码沙箱 | Docker | 安全隔离执行环境 |
+| 代码沙箱 | Conda | 更轻量，适合当前服务器和交互式复现实验 |
 | 向量存储 | FAISS | 轻量级，无需外部服务 |
 | 评估 | LLM-as-Judge + 规则指标 | 兼顾自动化和评估质量 |
 
@@ -623,7 +639,9 @@ sota_bench_agent/
 | 搜索结果质量不足 | 多源搜索（Tavily + arXiv API + GitHub），Reflector 自动补充 |
 | LLM 输出格式不稳定 | 使用 structured output / JSON mode，加入格式校验和重试 |
 | API 调用成本 | 缓存机制 + RAG 避免重复搜索，Best-of-N 的 N 可配置 |
-| 代码执行安全 | Docker 沙箱隔离，设置超时和资源限制 |
+| 代码执行安全 | Conda 环境隔离，设置超时、镜像和失败重试 |
+| 复现依赖源不稳定 | pip/conda/HF 镜像注入，PyTorch CUDA wheel 改写，HF 下载失败自动重试 |
+| LLM 生成无效执行命令 | 计划阶段 prompt 约束 + `_is_valid_command` 确定性过滤 |
 | 3 天时间紧张 | 优先级明确：Day1-2 完成二级 Agent + RL，Day3 做 Code Agent |
 
 ---

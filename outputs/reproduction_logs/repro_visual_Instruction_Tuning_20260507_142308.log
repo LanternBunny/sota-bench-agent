@@ -1,0 +1,494 @@
+[transformers] PyTorch was not found. Models won't be available and only tokenizers, configuration and file/data utilities can be used.
+[CodeAgentJob] repo_url=https://github.com/haotian-liu/LLaVA
+[CodeAgentJob] workspace_name=visual Instruction Tuning
+[CodeAgentJob] base_env=llava
+[CodeAgent] Removing existing repo dir: /home/chengyuxuan/Agent/sota-bench-agent/outputs/repos/visual_Instruction_Tuning/LLaVA
+[CodeAgent] Cloning https://github.com/haotian-liu/LLaVA.git -> /home/chengyuxuan/Agent/sota-bench-agent/outputs/repos/visual_Instruction_Tuning/LLaVA (timeout=1200s)
+[CodeAgent] Cloned https://github.com/haotian-liu/LLaVA.git -> /home/chengyuxuan/Agent/sota-bench-agent/outputs/repos/visual_Instruction_Tuning/LLaVA
+[CodeAgentJob] node=repo_fetcher
+Cloned https://github.com/haotian-liu/LLaVA.git -> /home/chengyuxuan/Agent/sota-bench-agent/outputs/repos/visual_Instruction_Tuning/LLaVA
+[CodeAgentJob] node=code_parser
+Parsed repo: entry=predict.py, dependency_file=pyproject.toml, has_readme=True
+[CodeAgent] Planned 12 execution steps
+[CodeAgent] plan[0]: conda config --add channels https://mirrors.tuna.tsinghua.edu.cn/anaconda/pkgs/free/
+[CodeAgent] plan[1]: conda config --add channels https://mirrors.tuna.tsinghua.edu.cn/anaconda/pkgs/main/
+[CodeAgent] plan[2]: conda config --set show_channel_urls yes
+[CodeAgent] plan[3]: pip install torch==2.1.2 torchvision==0.16.2 --index-url https://download.pytorch.org/whl/cu121
+[CodeAgent] plan[4]: pip install transformers==4.37.2 tokenizers==0.15.1 sentencepiece==0.1.99 shortuuid
+[CodeAgent] plan[5]: pip install accelerate==0.21.0 peft bitsandbytes
+[CodeAgent] plan[6]: pip install pydantic markdown2[all] numpy scikit-learn==1.2.2
+[CodeAgent] plan[7]: pip install gradio==4.16.0 gradio_client==0.8.1
+[CodeAgent] plan[8]: pip install requests httpx==0.24.0 uvicorn fastapi
+[CodeAgent] plan[9]: pip install einops==0.6.1 einops-exts==0.0.4 timm==0.6.13
+[CodeAgent] plan[10]: HF_ENDPOINT=https://hf-mirror.com huggingface-cli download liuhaotian/llava-v1.5-7b --local-dir models/llava-v1.5-7b
+[CodeAgent] plan[11]: python predict.py
+[CodeAgentJob] node=execution_planner
+Planned 12 execution steps
+[CodeAgent] Checking conda env: sota_repo_LLaVA
+[CodeAgent] Conda env 'sota_repo_LLaVA' already exists
+[CodeAgent] Step 0/12 command timeout=3600s: conda config --add channels https://mirrors.tuna.tsinghua.edu.cn/anaconda/pkgs/free/
+[CodeAgent] Using pip mirror: https://pypi.tuna.tsinghua.edu.cn/simple (trusted_host=pypi.tuna.tsinghua.edu.cn, pip_timeout=3000s, retries=10)
+[CodeAgent] Using Hugging Face mirror: https://hf-mirror.com
+[CodeAgent] Using conda mirrors: https://mirrors.tuna.tsinghua.edu.cn/anaconda/pkgs/main, https://mirrors.tuna.tsinghua.edu.cn/anaconda/pkgs/r, https://mirrors.tuna.tsinghua.edu.cn/anaconda/cloud/conda-forge
+[CodeAgent] cwd=/home/chengyuxuan/Agent/sota-bench-agent/outputs/repos/visual_Instruction_Tuning/LLaVA
+[CodeAgent] run: conda run --no-capture-output -n sota_repo_LLaVA bash -c 'PIP_INDEX_URL='\''https://pypi.tuna.tsinghua.edu.cn/simple'\'' PIP_TRUSTED_HOST='\''pypi.tuna.tsinghua.edu.cn'\'' PIP_DEFAULT_TIMEOUT='\''3000'\'' PIP_RETRIES='\''10'\'' HF_ENDPOINT='\''https://hf-mirror.com'\'' HUGGINGFACE_HUB_ENDPOINT='\''https://hf-mirror.com'\'' conda config --add channels https://mirrors.tuna.tsinghua.edu.cn/anaconda/pkgs/free/'
+[CodeAgentJob] node=executor
+[Step 0] SUCCESS: conda config --add channels https://mirrors.tuna.tsinghua.edu.cn/anaconda/pkgs/free/
+[CodeAgent] Step 1/12 command timeout=3600s: conda config --add channels https://mirrors.tuna.tsinghua.edu.cn/anaconda/pkgs/main/
+[CodeAgent] Using pip mirror: https://pypi.tuna.tsinghua.edu.cn/simple (trusted_host=pypi.tuna.tsinghua.edu.cn, pip_timeout=3000s, retries=10)
+[CodeAgent] Using Hugging Face mirror: https://hf-mirror.com
+[CodeAgent] Using conda mirrors: https://mirrors.tuna.tsinghua.edu.cn/anaconda/pkgs/main, https://mirrors.tuna.tsinghua.edu.cn/anaconda/pkgs/r, https://mirrors.tuna.tsinghua.edu.cn/anaconda/cloud/conda-forge
+[CodeAgent] cwd=/home/chengyuxuan/Agent/sota-bench-agent/outputs/repos/visual_Instruction_Tuning/LLaVA
+[CodeAgent] run: conda run --no-capture-output -n sota_repo_LLaVA bash -c 'PIP_INDEX_URL='\''https://pypi.tuna.tsinghua.edu.cn/simple'\'' PIP_TRUSTED_HOST='\''pypi.tuna.tsinghua.edu.cn'\'' PIP_DEFAULT_TIMEOUT='\''3000'\'' PIP_RETRIES='\''10'\'' HF_ENDPOINT='\''https://hf-mirror.com'\'' HUGGINGFACE_HUB_ENDPOINT='\''https://hf-mirror.com'\'' conda config --add channels https://mirrors.tuna.tsinghua.edu.cn/anaconda/pkgs/main/'
+Warning: 'https://mirrors.tuna.tsinghua.edu.cn/anaconda/pkgs/main/' already in 'channels' list, moving to the top
+[CodeAgentJob] node=executor
+[Step 1] SUCCESS: conda config --add channels https://mirrors.tuna.tsinghua.edu.cn/anaconda/pkgs/main/
+stdout: Warning: 'https://mirrors.tuna.tsinghua.edu.cn/anaconda/pkgs/main/' already in 'channels' list, moving to the top
+
+[CodeAgent] Step 2/12 command timeout=3600s: conda config --set show_channel_urls yes
+[CodeAgent] Using pip mirror: https://pypi.tuna.tsinghua.edu.cn/simple (trusted_host=pypi.tuna.tsinghua.edu.cn, pip_timeout=3000s, retries=10)
+[CodeAgent] Using Hugging Face mirror: https://hf-mirror.com
+[CodeAgent] Using conda mirrors: https://mirrors.tuna.tsinghua.edu.cn/anaconda/pkgs/main, https://mirrors.tuna.tsinghua.edu.cn/anaconda/pkgs/r, https://mirrors.tuna.tsinghua.edu.cn/anaconda/cloud/conda-forge
+[CodeAgent] cwd=/home/chengyuxuan/Agent/sota-bench-agent/outputs/repos/visual_Instruction_Tuning/LLaVA
+[CodeAgent] run: conda run --no-capture-output -n sota_repo_LLaVA bash -c 'PIP_INDEX_URL='\''https://pypi.tuna.tsinghua.edu.cn/simple'\'' PIP_TRUSTED_HOST='\''pypi.tuna.tsinghua.edu.cn'\'' PIP_DEFAULT_TIMEOUT='\''3000'\'' PIP_RETRIES='\''10'\'' HF_ENDPOINT='\''https://hf-mirror.com'\'' HUGGINGFACE_HUB_ENDPOINT='\''https://hf-mirror.com'\'' conda config --set show_channel_urls yes'
+[CodeAgentJob] node=executor
+[Step 2] SUCCESS: conda config --set show_channel_urls yes
+[CodeAgent] Step 3/12 command timeout=3600s: pip install torch==2.1.2 torchvision==0.16.2 --index-url https://download.pytorch.org/whl/cu121
+[CodeAgent] Using pip mirror: https://pypi.tuna.tsinghua.edu.cn/simple (trusted_host=pypi.tuna.tsinghua.edu.cn, pip_timeout=3000s, retries=10)
+[CodeAgent] Using Hugging Face mirror: https://hf-mirror.com
+[CodeAgent] Using conda mirrors: https://mirrors.tuna.tsinghua.edu.cn/anaconda/pkgs/main, https://mirrors.tuna.tsinghua.edu.cn/anaconda/pkgs/r, https://mirrors.tuna.tsinghua.edu.cn/anaconda/cloud/conda-forge
+[CodeAgent] cwd=/home/chengyuxuan/Agent/sota-bench-agent/outputs/repos/visual_Instruction_Tuning/LLaVA
+[CodeAgent] run: conda run --no-capture-output -n sota_repo_LLaVA bash -c 'PIP_INDEX_URL='\''https://pypi.tuna.tsinghua.edu.cn/simple'\'' PIP_TRUSTED_HOST='\''pypi.tuna.tsinghua.edu.cn'\'' PIP_DEFAULT_TIMEOUT='\''3000'\'' PIP_RETRIES='\''10'\'' HF_ENDPOINT='\''https://hf-mirror.com'\'' HUGGINGFACE_HUB_ENDPOINT='\''https://hf-mirror.com'\'' pip install torch==2.1.2 torchvision==0.16.2 --default-timeout=3000 --retries=10 --index-url https://download.pytorch.org/whl/cu121'
+Looking in indexes: https://download.pytorch.org/whl/cu121
+Requirement already satisfied: torch==2.1.2 in /home/chengyuxuan/miniconda3/envs/sota_repo_LLaVA/lib/python3.10/site-packages (2.1.2)
+Requirement already satisfied: torchvision==0.16.2 in /home/chengyuxuan/miniconda3/envs/sota_repo_LLaVA/lib/python3.10/site-packages (0.16.2)
+Requirement already satisfied: filelock in /home/chengyuxuan/miniconda3/envs/sota_repo_LLaVA/lib/python3.10/site-packages (from torch==2.1.2) (3.29.0)
+Requirement already satisfied: typing-extensions in /home/chengyuxuan/miniconda3/envs/sota_repo_LLaVA/lib/python3.10/site-packages (from torch==2.1.2) (4.15.0)
+Requirement already satisfied: sympy in /home/chengyuxuan/miniconda3/envs/sota_repo_LLaVA/lib/python3.10/site-packages (from torch==2.1.2) (1.14.0)
+Requirement already satisfied: networkx in /home/chengyuxuan/miniconda3/envs/sota_repo_LLaVA/lib/python3.10/site-packages (from torch==2.1.2) (3.4.2)
+Requirement already satisfied: jinja2 in /home/chengyuxuan/miniconda3/envs/sota_repo_LLaVA/lib/python3.10/site-packages (from torch==2.1.2) (3.1.6)
+Requirement already satisfied: fsspec in /home/chengyuxuan/miniconda3/envs/sota_repo_LLaVA/lib/python3.10/site-packages (from torch==2.1.2) (2026.4.0)
+Requirement already satisfied: nvidia-cuda-nvrtc-cu12==12.1.105 in /home/chengyuxuan/miniconda3/envs/sota_repo_LLaVA/lib/python3.10/site-packages (from torch==2.1.2) (12.1.105)
+Requirement already satisfied: nvidia-cuda-runtime-cu12==12.1.105 in /home/chengyuxuan/miniconda3/envs/sota_repo_LLaVA/lib/python3.10/site-packages (from torch==2.1.2) (12.1.105)
+Requirement already satisfied: nvidia-cuda-cupti-cu12==12.1.105 in /home/chengyuxuan/miniconda3/envs/sota_repo_LLaVA/lib/python3.10/site-packages (from torch==2.1.2) (12.1.105)
+Requirement already satisfied: nvidia-cudnn-cu12==8.9.2.26 in /home/chengyuxuan/miniconda3/envs/sota_repo_LLaVA/lib/python3.10/site-packages (from torch==2.1.2) (8.9.2.26)
+Requirement already satisfied: nvidia-cublas-cu12==12.1.3.1 in /home/chengyuxuan/miniconda3/envs/sota_repo_LLaVA/lib/python3.10/site-packages (from torch==2.1.2) (12.1.3.1)
+Requirement already satisfied: nvidia-cufft-cu12==11.0.2.54 in /home/chengyuxuan/miniconda3/envs/sota_repo_LLaVA/lib/python3.10/site-packages (from torch==2.1.2) (11.0.2.54)
+Requirement already satisfied: nvidia-curand-cu12==10.3.2.106 in /home/chengyuxuan/miniconda3/envs/sota_repo_LLaVA/lib/python3.10/site-packages (from torch==2.1.2) (10.3.2.106)
+Requirement already satisfied: nvidia-cusolver-cu12==11.4.5.107 in /home/chengyuxuan/miniconda3/envs/sota_repo_LLaVA/lib/python3.10/site-packages (from torch==2.1.2) (11.4.5.107)
+Requirement already satisfied: nvidia-cusparse-cu12==12.1.0.106 in /home/chengyuxuan/miniconda3/envs/sota_repo_LLaVA/lib/python3.10/site-packages (from torch==2.1.2) (12.1.0.106)
+Requirement already satisfied: nvidia-nccl-cu12==2.18.1 in /home/chengyuxuan/miniconda3/envs/sota_repo_LLaVA/lib/python3.10/site-packages (from torch==2.1.2) (2.18.1)
+Requirement already satisfied: nvidia-nvtx-cu12==12.1.105 in /home/chengyuxuan/miniconda3/envs/sota_repo_LLaVA/lib/python3.10/site-packages (from torch==2.1.2) (12.1.105)
+Requirement already satisfied: triton==2.1.0 in /home/chengyuxuan/miniconda3/envs/sota_repo_LLaVA/lib/python3.10/site-packages (from torch==2.1.2) (2.1.0)
+Requirement already satisfied: numpy in /home/chengyuxuan/miniconda3/envs/sota_repo_LLaVA/lib/python3.10/site-packages (from torchvision==0.16.2) (1.26.4)
+Requirement already satisfied: requests in /home/chengyuxuan/miniconda3/envs/sota_repo_LLaVA/lib/python3.10/site-packages (from torchvision==0.16.2) (2.33.1)
+Requirement already satisfied: pillow!=8.3.*,>=5.3.0 in /home/chengyuxuan/miniconda3/envs/sota_repo_LLaVA/lib/python3.10/site-packages (from torchvision==0.16.2) (10.4.0)
+Requirement already satisfied: nvidia-nvjitlink-cu12 in /home/chengyuxuan/miniconda3/envs/sota_repo_LLaVA/lib/python3.10/site-packages (from nvidia-cusolver-cu12==11.4.5.107->torch==2.1.2) (12.9.86)
+Requirement already satisfied: MarkupSafe>=2.0 in /home/chengyuxuan/miniconda3/envs/sota_repo_LLaVA/lib/python3.10/site-packages (from jinja2->torch==2.1.2) (2.1.5)
+Requirement already satisfied: charset_normalizer<4,>=2 in /home/chengyuxuan/miniconda3/envs/sota_repo_LLaVA/lib/python3.10/site-packages (from requests->torchvision==0.16.2) (3.4.7)
+Requirement already satisfied: idna<4,>=2.5 in /home/chengyuxuan/miniconda3/envs/sota_repo_LLaVA/lib/python3.10/site-packages (from requests->torchvision==0.16.2) (3.13)
+Requirement already satisfied: urllib3<3,>=1.26 in /home/chengyuxuan/miniconda3/envs/sota_repo_LLaVA/lib/python3.10/site-packages (from requests->torchvision==0.16.2) (2.6.3)
+Requirement already satisfied: certifi>=2023.5.7 in /home/chengyuxuan/miniconda3/envs/sota_repo_LLaVA/lib/python3.10/site-packages (from requests->torchvision==0.16.2) (2026.4.22)
+Requirement already satisfied: mpmath<1.4,>=1.1.0 in /home/chengyuxuan/miniconda3/envs/sota_repo_LLaVA/lib/python3.10/site-packages (from sympy->torch==2.1.2) (1.3.0)
+[CodeAgentJob] node=executor
+[Step 3] SUCCESS: pip install torch==2.1.2 torchvision==0.16.2 --index-url https://download.pytorch.org/whl/cu121
+stdout: 12.1.105 in /home/chengyuxuan/miniconda3/envs/sota_repo_LLaVA/lib/python3.10/site-packages (from torch==2.1.2) (12.1.105)
+Requirement already satisfied: triton==2.1.0 in /home/chengyuxuan/miniconda3/envs/sota_repo_LLaVA/lib/python3.10/site-packages (from torch==2.1.2) (2.1.0)
+Requirement already satisfied: numpy in /home/chengyuxuan/miniconda3/envs/sota_repo_LLaVA/lib/python3.10/site-packages (from torchvision==0.16.2) (1.26.4)
+Requirement already satisfied: requests in /home/chengyuxuan/minicon
+[CodeAgent] Step 4/12 command timeout=3600s: pip install transformers==4.37.2 tokenizers==0.15.1 sentencepiece==0.1.99 shortuuid
+[CodeAgent] Using pip mirror: https://pypi.tuna.tsinghua.edu.cn/simple (trusted_host=pypi.tuna.tsinghua.edu.cn, pip_timeout=3000s, retries=10)
+[CodeAgent] Using Hugging Face mirror: https://hf-mirror.com
+[CodeAgent] Using conda mirrors: https://mirrors.tuna.tsinghua.edu.cn/anaconda/pkgs/main, https://mirrors.tuna.tsinghua.edu.cn/anaconda/pkgs/r, https://mirrors.tuna.tsinghua.edu.cn/anaconda/cloud/conda-forge
+[CodeAgent] cwd=/home/chengyuxuan/Agent/sota-bench-agent/outputs/repos/visual_Instruction_Tuning/LLaVA
+[CodeAgent] run: conda run --no-capture-output -n sota_repo_LLaVA bash -c 'PIP_INDEX_URL='\''https://pypi.tuna.tsinghua.edu.cn/simple'\'' PIP_TRUSTED_HOST='\''pypi.tuna.tsinghua.edu.cn'\'' PIP_DEFAULT_TIMEOUT='\''3000'\'' PIP_RETRIES='\''10'\'' HF_ENDPOINT='\''https://hf-mirror.com'\'' HUGGINGFACE_HUB_ENDPOINT='\''https://hf-mirror.com'\'' pip install transformers==4.37.2 tokenizers==0.15.1 sentencepiece==0.1.99 shortuuid --default-timeout=3000 --retries=10 --index-url https://pypi.tuna.tsinghua.edu.cn/simple --trusted-host pypi.tuna.tsinghua.edu.cn'
+Looking in indexes: https://pypi.tuna.tsinghua.edu.cn/simple
+Requirement already satisfied: transformers==4.37.2 in /home/chengyuxuan/miniconda3/envs/sota_repo_LLaVA/lib/python3.10/site-packages (4.37.2)
+Requirement already satisfied: tokenizers==0.15.1 in /home/chengyuxuan/miniconda3/envs/sota_repo_LLaVA/lib/python3.10/site-packages (0.15.1)
+Requirement already satisfied: sentencepiece==0.1.99 in /home/chengyuxuan/miniconda3/envs/sota_repo_LLaVA/lib/python3.10/site-packages (0.1.99)
+Requirement already satisfied: shortuuid in /home/chengyuxuan/miniconda3/envs/sota_repo_LLaVA/lib/python3.10/site-packages (1.0.13)
+Requirement already satisfied: filelock in /home/chengyuxuan/miniconda3/envs/sota_repo_LLaVA/lib/python3.10/site-packages (from transformers==4.37.2) (3.29.0)
+Requirement already satisfied: huggingface-hub<1.0,>=0.19.3 in /home/chengyuxuan/miniconda3/envs/sota_repo_LLaVA/lib/python3.10/site-packages (from transformers==4.37.2) (0.36.2)
+Requirement already satisfied: numpy>=1.17 in /home/chengyuxuan/miniconda3/envs/sota_repo_LLaVA/lib/python3.10/site-packages (from transformers==4.37.2) (1.26.4)
+Requirement already satisfied: packaging>=20.0 in /home/chengyuxuan/miniconda3/envs/sota_repo_LLaVA/lib/python3.10/site-packages (from transformers==4.37.2) (26.0)
+Requirement already satisfied: pyyaml>=5.1 in /home/chengyuxuan/miniconda3/envs/sota_repo_LLaVA/lib/python3.10/site-packages (from transformers==4.37.2) (6.0.3)
+Requirement already satisfied: regex!=2019.12.17 in /home/chengyuxuan/miniconda3/envs/sota_repo_LLaVA/lib/python3.10/site-packages (from transformers==4.37.2) (2026.4.4)
+Requirement already satisfied: requests in /home/chengyuxuan/miniconda3/envs/sota_repo_LLaVA/lib/python3.10/site-packages (from transformers==4.37.2) (2.33.1)
+Requirement already satisfied: safetensors>=0.4.1 in /home/chengyuxuan/miniconda3/envs/sota_repo_LLaVA/lib/python3.10/site-packages (from transformers==4.37.2) (0.7.0)
+Requirement already satisfied: tqdm>=4.27 in /home/chengyuxuan/miniconda3/envs/sota_repo_LLaVA/lib/python3.10/site-packages (from transformers==4.37.2) (4.67.3)
+Requirement already satisfied: fsspec>=2023.5.0 in /home/chengyuxuan/miniconda3/envs/sota_repo_LLaVA/lib/python3.10/site-packages (from huggingface-hub<1.0,>=0.19.3->transformers==4.37.2) (2026.4.0)
+Requirement already satisfied: hf-xet<2.0.0,>=1.1.3 in /home/chengyuxuan/miniconda3/envs/sota_repo_LLaVA/lib/python3.10/site-packages (from huggingface-hub<1.0,>=0.19.3->transformers==4.37.2) (1.5.0)
+Requirement already satisfied: typing-extensions>=3.7.4.3 in /home/chengyuxuan/miniconda3/envs/sota_repo_LLaVA/lib/python3.10/site-packages (from huggingface-hub<1.0,>=0.19.3->transformers==4.37.2) (4.15.0)
+Requirement already satisfied: charset_normalizer<4,>=2 in /home/chengyuxuan/miniconda3/envs/sota_repo_LLaVA/lib/python3.10/site-packages (from requests->transformers==4.37.2) (3.4.7)
+Requirement already satisfied: idna<4,>=2.5 in /home/chengyuxuan/miniconda3/envs/sota_repo_LLaVA/lib/python3.10/site-packages (from requests->transformers==4.37.2) (3.13)
+Requirement already satisfied: urllib3<3,>=1.26 in /home/chengyuxuan/miniconda3/envs/sota_repo_LLaVA/lib/python3.10/site-packages (from requests->transformers==4.37.2) (2.6.3)
+Requirement already satisfied: certifi>=2023.5.7 in /home/chengyuxuan/miniconda3/envs/sota_repo_LLaVA/lib/python3.10/site-packages (from requests->transformers==4.37.2) (2026.4.22)
+[CodeAgentJob] node=executor
+[Step 4] SUCCESS: pip install transformers==4.37.2 tokenizers==0.15.1 sentencepiece==0.1.99 shortuuid
+stdout: ormers==4.37.2) (6.0.3)
+Requirement already satisfied: regex!=2019.12.17 in /home/chengyuxuan/miniconda3/envs/sota_repo_LLaVA/lib/python3.10/site-packages (from transformers==4.37.2) (2026.4.4)
+Requirement already satisfied: requests in /home/chengyuxuan/miniconda3/envs/sota_repo_LLaVA/lib/python3.10/site-packages (from transformers==4.37.2) (2.33.1)
+Requirement already satisfied: safetensors>=0.4.1 in /home/chengyuxuan/miniconda3/envs/sota_repo_LLaVA/lib/python3.10/site-packages (from transform
+[CodeAgent] Step 5/12 command timeout=3600s: pip install accelerate==0.21.0 peft bitsandbytes
+[CodeAgent] Using pip mirror: https://pypi.tuna.tsinghua.edu.cn/simple (trusted_host=pypi.tuna.tsinghua.edu.cn, pip_timeout=3000s, retries=10)
+[CodeAgent] Using Hugging Face mirror: https://hf-mirror.com
+[CodeAgent] Using conda mirrors: https://mirrors.tuna.tsinghua.edu.cn/anaconda/pkgs/main, https://mirrors.tuna.tsinghua.edu.cn/anaconda/pkgs/r, https://mirrors.tuna.tsinghua.edu.cn/anaconda/cloud/conda-forge
+[CodeAgent] cwd=/home/chengyuxuan/Agent/sota-bench-agent/outputs/repos/visual_Instruction_Tuning/LLaVA
+[CodeAgent] run: conda run --no-capture-output -n sota_repo_LLaVA bash -c 'PIP_INDEX_URL='\''https://pypi.tuna.tsinghua.edu.cn/simple'\'' PIP_TRUSTED_HOST='\''pypi.tuna.tsinghua.edu.cn'\'' PIP_DEFAULT_TIMEOUT='\''3000'\'' PIP_RETRIES='\''10'\'' HF_ENDPOINT='\''https://hf-mirror.com'\'' HUGGINGFACE_HUB_ENDPOINT='\''https://hf-mirror.com'\'' pip install accelerate==0.21.0 peft bitsandbytes --default-timeout=3000 --retries=10 --index-url https://pypi.tuna.tsinghua.edu.cn/simple --trusted-host pypi.tuna.tsinghua.edu.cn'
+Looking in indexes: https://pypi.tuna.tsinghua.edu.cn/simple
+Requirement already satisfied: accelerate==0.21.0 in /home/chengyuxuan/miniconda3/envs/sota_repo_LLaVA/lib/python3.10/site-packages (0.21.0)
+Requirement already satisfied: peft in /home/chengyuxuan/miniconda3/envs/sota_repo_LLaVA/lib/python3.10/site-packages (0.19.1)
+Requirement already satisfied: bitsandbytes in /home/chengyuxuan/miniconda3/envs/sota_repo_LLaVA/lib/python3.10/site-packages (0.45.5)
+Requirement already satisfied: numpy>=1.17 in /home/chengyuxuan/miniconda3/envs/sota_repo_LLaVA/lib/python3.10/site-packages (from accelerate==0.21.0) (1.26.4)
+Requirement already satisfied: packaging>=20.0 in /home/chengyuxuan/miniconda3/envs/sota_repo_LLaVA/lib/python3.10/site-packages (from accelerate==0.21.0) (26.0)
+Requirement already satisfied: psutil in /home/chengyuxuan/miniconda3/envs/sota_repo_LLaVA/lib/python3.10/site-packages (from accelerate==0.21.0) (7.2.2)
+Requirement already satisfied: pyyaml in /home/chengyuxuan/miniconda3/envs/sota_repo_LLaVA/lib/python3.10/site-packages (from accelerate==0.21.0) (6.0.3)
+Requirement already satisfied: torch>=1.10.0 in /home/chengyuxuan/miniconda3/envs/sota_repo_LLaVA/lib/python3.10/site-packages (from accelerate==0.21.0) (2.1.2)
+Requirement already satisfied: transformers in /home/chengyuxuan/miniconda3/envs/sota_repo_LLaVA/lib/python3.10/site-packages (from peft) (4.37.2)
+Requirement already satisfied: tqdm in /home/chengyuxuan/miniconda3/envs/sota_repo_LLaVA/lib/python3.10/site-packages (from peft) (4.67.3)
+Requirement already satisfied: safetensors in /home/chengyuxuan/miniconda3/envs/sota_repo_LLaVA/lib/python3.10/site-packages (from peft) (0.7.0)
+Requirement already satisfied: huggingface_hub>=0.25.0 in /home/chengyuxuan/miniconda3/envs/sota_repo_LLaVA/lib/python3.10/site-packages (from peft) (0.36.2)
+Requirement already satisfied: filelock in /home/chengyuxuan/miniconda3/envs/sota_repo_LLaVA/lib/python3.10/site-packages (from torch>=1.10.0->accelerate==0.21.0) (3.29.0)
+Requirement already satisfied: typing-extensions in /home/chengyuxuan/miniconda3/envs/sota_repo_LLaVA/lib/python3.10/site-packages (from torch>=1.10.0->accelerate==0.21.0) (4.15.0)
+Requirement already satisfied: sympy in /home/chengyuxuan/miniconda3/envs/sota_repo_LLaVA/lib/python3.10/site-packages (from torch>=1.10.0->accelerate==0.21.0) (1.14.0)
+Requirement already satisfied: networkx in /home/chengyuxuan/miniconda3/envs/sota_repo_LLaVA/lib/python3.10/site-packages (from torch>=1.10.0->accelerate==0.21.0) (3.4.2)
+Requirement already satisfied: jinja2 in /home/chengyuxuan/miniconda3/envs/sota_repo_LLaVA/lib/python3.10/site-packages (from torch>=1.10.0->accelerate==0.21.0) (3.1.6)
+Requirement already satisfied: fsspec in /home/chengyuxuan/miniconda3/envs/sota_repo_LLaVA/lib/python3.10/site-packages (from torch>=1.10.0->accelerate==0.21.0) (2026.4.0)
+Requirement already satisfied: nvidia-cuda-nvrtc-cu12==12.1.105 in /home/chengyuxuan/miniconda3/envs/sota_repo_LLaVA/lib/python3.10/site-packages (from torch>=1.10.0->accelerate==0.21.0) (12.1.105)
+Requirement already satisfied: nvidia-cuda-runtime-cu12==12.1.105 in /home/chengyuxuan/miniconda3/envs/sota_repo_LLaVA/lib/python3.10/site-packages (from torch>=1.10.0->accelerate==0.21.0) (12.1.105)
+Requirement already satisfied: nvidia-cuda-cupti-cu12==12.1.105 in /home/chengyuxuan/miniconda3/envs/sota_repo_LLaVA/lib/python3.10/site-packages (from torch>=1.10.0->accelerate==0.21.0) (12.1.105)
+Requirement already satisfied: nvidia-cudnn-cu12==8.9.2.26 in /home/chengyuxuan/miniconda3/envs/sota_repo_LLaVA/lib/python3.10/site-packages (from torch>=1.10.0->accelerate==0.21.0) (8.9.2.26)
+Requirement already satisfied: nvidia-cublas-cu12==12.1.3.1 in /home/chengyuxuan/miniconda3/envs/sota_repo_LLaVA/lib/python3.10/site-packages (from torch>=1.10.0->accelerate==0.21.0) (12.1.3.1)
+Requirement already satisfied: nvidia-cufft-cu12==11.0.2.54 in /home/chengyuxuan/miniconda3/envs/sota_repo_LLaVA/lib/python3.10/site-packages (from torch>=1.10.0->accelerate==0.21.0) (11.0.2.54)
+Requirement already satisfied: nvidia-curand-cu12==10.3.2.106 in /home/chengyuxuan/miniconda3/envs/sota_repo_LLaVA/lib/python3.10/site-packages (from torch>=1.10.0->accelerate==0.21.0) (10.3.2.106)
+Requirement already satisfied: nvidia-cusolver-cu12==11.4.5.107 in /home/chengyuxuan/miniconda3/envs/sota_repo_LLaVA/lib/python3.10/site-packages (from torch>=1.10.0->accelerate==0.21.0) (11.4.5.107)
+Requirement already satisfied: nvidia-cusparse-cu12==12.1.0.106 in /home/chengyuxuan/miniconda3/envs/sota_repo_LLaVA/lib/python3.10/site-packages (from torch>=1.10.0->accelerate==0.21.0) (12.1.0.106)
+Requirement already satisfied: nvidia-nccl-cu12==2.18.1 in /home/chengyuxuan/miniconda3/envs/sota_repo_LLaVA/lib/python3.10/site-packages (from torch>=1.10.0->accelerate==0.21.0) (2.18.1)
+Requirement already satisfied: nvidia-nvtx-cu12==12.1.105 in /home/chengyuxuan/miniconda3/envs/sota_repo_LLaVA/lib/python3.10/site-packages (from torch>=1.10.0->accelerate==0.21.0) (12.1.105)
+Requirement already satisfied: triton==2.1.0 in /home/chengyuxuan/miniconda3/envs/sota_repo_LLaVA/lib/python3.10/site-packages (from torch>=1.10.0->accelerate==0.21.0) (2.1.0)
+Requirement already satisfied: nvidia-nvjitlink-cu12 in /home/chengyuxuan/miniconda3/envs/sota_repo_LLaVA/lib/python3.10/site-packages (from nvidia-cusolver-cu12==11.4.5.107->torch>=1.10.0->accelerate==0.21.0) (12.9.86)
+Requirement already satisfied: hf-xet<2.0.0,>=1.1.3 in /home/chengyuxuan/miniconda3/envs/sota_repo_LLaVA/lib/python3.10/site-packages (from huggingface_hub>=0.25.0->peft) (1.5.0)
+Requirement already satisfied: requests in /home/chengyuxuan/miniconda3/envs/sota_repo_LLaVA/lib/python3.10/site-packages (from huggingface_hub>=0.25.0->peft) (2.33.1)
+Requirement already satisfied: MarkupSafe>=2.0 in /home/chengyuxuan/miniconda3/envs/sota_repo_LLaVA/lib/python3.10/site-packages (from jinja2->torch>=1.10.0->accelerate==0.21.0) (2.1.5)
+Requirement already satisfied: charset_normalizer<4,>=2 in /home/chengyuxuan/miniconda3/envs/sota_repo_LLaVA/lib/python3.10/site-packages (from requests->huggingface_hub>=0.25.0->peft) (3.4.7)
+Requirement already satisfied: idna<4,>=2.5 in /home/chengyuxuan/miniconda3/envs/sota_repo_LLaVA/lib/python3.10/site-packages (from requests->huggingface_hub>=0.25.0->peft) (3.13)
+Requirement already satisfied: urllib3<3,>=1.26 in /home/chengyuxuan/miniconda3/envs/sota_repo_LLaVA/lib/python3.10/site-packages (from requests->huggingface_hub>=0.25.0->peft) (2.6.3)
+Requirement already satisfied: certifi>=2023.5.7 in /home/chengyuxuan/miniconda3/envs/sota_repo_LLaVA/lib/python3.10/site-packages (from requests->huggingface_hub>=0.25.0->peft) (2026.4.22)
+Requirement already satisfied: mpmath<1.4,>=1.1.0 in /home/chengyuxuan/miniconda3/envs/sota_repo_LLaVA/lib/python3.10/site-packages (from sympy->torch>=1.10.0->accelerate==0.21.0) (1.3.0)
+Requirement already satisfied: regex!=2019.12.17 in /home/chengyuxuan/miniconda3/envs/sota_repo_LLaVA/lib/python3.10/site-packages (from transformers->peft) (2026.4.4)
+Requirement already satisfied: tokenizers<0.19,>=0.14 in /home/chengyuxuan/miniconda3/envs/sota_repo_LLaVA/lib/python3.10/site-packages (from transformers->peft) (0.15.1)
+[CodeAgentJob] node=executor
+[Step 5] SUCCESS: pip install accelerate==0.21.0 peft bitsandbytes
+stdout: d: nvidia-nvjitlink-cu12 in /home/chengyuxuan/miniconda3/envs/sota_repo_LLaVA/lib/python3.10/site-packages (from nvidia-cusolver-cu12==11.4.5.107->torch>=1.10.0->accelerate==0.21.0) (12.9.86)
+Requirement already satisfied: hf-xet<2.0.0,>=1.1.3 in /home/chengyuxuan/miniconda3/envs/sota_repo_LLaVA/lib/python3.10/site-packages (from huggingface_hub>=0.25.0->peft) (1.5.0)
+Requirement already satisfied: requests in /home/chengyuxuan/miniconda3/envs/sota_repo_LLaVA/lib/python3.10/site-packages (from h
+[CodeAgent] Step 6/12 command timeout=3600s: pip install pydantic markdown2[all] numpy scikit-learn==1.2.2
+[CodeAgent] Using pip mirror: https://pypi.tuna.tsinghua.edu.cn/simple (trusted_host=pypi.tuna.tsinghua.edu.cn, pip_timeout=3000s, retries=10)
+[CodeAgent] Using Hugging Face mirror: https://hf-mirror.com
+[CodeAgent] Using conda mirrors: https://mirrors.tuna.tsinghua.edu.cn/anaconda/pkgs/main, https://mirrors.tuna.tsinghua.edu.cn/anaconda/pkgs/r, https://mirrors.tuna.tsinghua.edu.cn/anaconda/cloud/conda-forge
+[CodeAgent] cwd=/home/chengyuxuan/Agent/sota-bench-agent/outputs/repos/visual_Instruction_Tuning/LLaVA
+[CodeAgent] run: conda run --no-capture-output -n sota_repo_LLaVA bash -c 'PIP_INDEX_URL='\''https://pypi.tuna.tsinghua.edu.cn/simple'\'' PIP_TRUSTED_HOST='\''pypi.tuna.tsinghua.edu.cn'\'' PIP_DEFAULT_TIMEOUT='\''3000'\'' PIP_RETRIES='\''10'\'' HF_ENDPOINT='\''https://hf-mirror.com'\'' HUGGINGFACE_HUB_ENDPOINT='\''https://hf-mirror.com'\'' pip install pydantic markdown2[all] numpy scikit-learn==1.2.2 --default-timeout=3000 --retries=10 --index-url https://pypi.tuna.tsinghua.edu.cn/simple --trusted-host pypi.tuna.tsinghua.edu.cn'
+Looking in indexes: https://pypi.tuna.tsinghua.edu.cn/simple
+Requirement already satisfied: pydantic in /home/chengyuxuan/miniconda3/envs/sota_repo_LLaVA/lib/python3.10/site-packages (2.13.3)
+Requirement already satisfied: numpy in /home/chengyuxuan/miniconda3/envs/sota_repo_LLaVA/lib/python3.10/site-packages (1.26.4)
+Requirement already satisfied: scikit-learn==1.2.2 in /home/chengyuxuan/miniconda3/envs/sota_repo_LLaVA/lib/python3.10/site-packages (1.2.2)
+Requirement already satisfied: markdown2[all] in /home/chengyuxuan/miniconda3/envs/sota_repo_LLaVA/lib/python3.10/site-packages (2.5.5)
+Requirement already satisfied: scipy>=1.3.2 in /home/chengyuxuan/miniconda3/envs/sota_repo_LLaVA/lib/python3.10/site-packages (from scikit-learn==1.2.2) (1.15.3)
+Requirement already satisfied: joblib>=1.1.1 in /home/chengyuxuan/miniconda3/envs/sota_repo_LLaVA/lib/python3.10/site-packages (from scikit-learn==1.2.2) (1.5.3)
+Requirement already satisfied: threadpoolctl>=2.0.0 in /home/chengyuxuan/miniconda3/envs/sota_repo_LLaVA/lib/python3.10/site-packages (from scikit-learn==1.2.2) (3.6.0)
+Requirement already satisfied: annotated-types>=0.6.0 in /home/chengyuxuan/miniconda3/envs/sota_repo_LLaVA/lib/python3.10/site-packages (from pydantic) (0.7.0)
+Requirement already satisfied: pydantic-core==2.46.3 in /home/chengyuxuan/miniconda3/envs/sota_repo_LLaVA/lib/python3.10/site-packages (from pydantic) (2.46.3)
+Requirement already satisfied: typing-extensions>=4.14.1 in /home/chengyuxuan/miniconda3/envs/sota_repo_LLaVA/lib/python3.10/site-packages (from pydantic) (4.15.0)
+Requirement already satisfied: typing-inspection>=0.4.2 in /home/chengyuxuan/miniconda3/envs/sota_repo_LLaVA/lib/python3.10/site-packages (from pydantic) (0.4.2)
+Requirement already satisfied: pygments>=2.7.3 in /home/chengyuxuan/miniconda3/envs/sota_repo_LLaVA/lib/python3.10/site-packages (from markdown2[all]) (2.20.0)
+Requirement already satisfied: wavedrom in /home/chengyuxuan/miniconda3/envs/sota_repo_LLaVA/lib/python3.10/site-packages (from markdown2[all]) (2.0.3.post3)
+Requirement already satisfied: latex2mathml in /home/chengyuxuan/miniconda3/envs/sota_repo_LLaVA/lib/python3.10/site-packages (from markdown2[all]) (3.81.0)
+Requirement already satisfied: svgwrite in /home/chengyuxuan/miniconda3/envs/sota_repo_LLaVA/lib/python3.10/site-packages (from wavedrom->markdown2[all]) (1.4.3)
+Requirement already satisfied: six in /home/chengyuxuan/miniconda3/envs/sota_repo_LLaVA/lib/python3.10/site-packages (from wavedrom->markdown2[all]) (1.17.0)
+Requirement already satisfied: pyyaml in /home/chengyuxuan/miniconda3/envs/sota_repo_LLaVA/lib/python3.10/site-packages (from wavedrom->markdown2[all]) (6.0.3)
+[CodeAgentJob] node=executor
+[Step 6] SUCCESS: pip install pydantic markdown2[all] numpy scikit-learn==1.2.2
+stdout: VA/lib/python3.10/site-packages (from scikit-learn==1.2.2) (1.15.3)
+Requirement already satisfied: joblib>=1.1.1 in /home/chengyuxuan/miniconda3/envs/sota_repo_LLaVA/lib/python3.10/site-packages (from scikit-learn==1.2.2) (1.5.3)
+Requirement already satisfied: threadpoolctl>=2.0.0 in /home/chengyuxuan/miniconda3/envs/sota_repo_LLaVA/lib/python3.10/site-packages (from scikit-learn==1.2.2) (3.6.0)
+Requirement already satisfied: annotated-types>=0.6.0 in /home/chengyuxuan/miniconda3/envs/sota_repo_
+[CodeAgent] Step 7/12 command timeout=3600s: pip install gradio==4.16.0 gradio_client==0.8.1
+[CodeAgent] Using pip mirror: https://pypi.tuna.tsinghua.edu.cn/simple (trusted_host=pypi.tuna.tsinghua.edu.cn, pip_timeout=3000s, retries=10)
+[CodeAgent] Using Hugging Face mirror: https://hf-mirror.com
+[CodeAgent] Using conda mirrors: https://mirrors.tuna.tsinghua.edu.cn/anaconda/pkgs/main, https://mirrors.tuna.tsinghua.edu.cn/anaconda/pkgs/r, https://mirrors.tuna.tsinghua.edu.cn/anaconda/cloud/conda-forge
+[CodeAgent] cwd=/home/chengyuxuan/Agent/sota-bench-agent/outputs/repos/visual_Instruction_Tuning/LLaVA
+[CodeAgent] run: conda run --no-capture-output -n sota_repo_LLaVA bash -c 'PIP_INDEX_URL='\''https://pypi.tuna.tsinghua.edu.cn/simple'\'' PIP_TRUSTED_HOST='\''pypi.tuna.tsinghua.edu.cn'\'' PIP_DEFAULT_TIMEOUT='\''3000'\'' PIP_RETRIES='\''10'\'' HF_ENDPOINT='\''https://hf-mirror.com'\'' HUGGINGFACE_HUB_ENDPOINT='\''https://hf-mirror.com'\'' pip install gradio==4.16.0 gradio_client==0.8.1 --default-timeout=3000 --retries=10 --index-url https://pypi.tuna.tsinghua.edu.cn/simple --trusted-host pypi.tuna.tsinghua.edu.cn'
+Looking in indexes: https://pypi.tuna.tsinghua.edu.cn/simple
+Requirement already satisfied: gradio==4.16.0 in /home/chengyuxuan/miniconda3/envs/sota_repo_LLaVA/lib/python3.10/site-packages (4.16.0)
+Requirement already satisfied: gradio_client==0.8.1 in /home/chengyuxuan/miniconda3/envs/sota_repo_LLaVA/lib/python3.10/site-packages (0.8.1)
+Requirement already satisfied: aiofiles<24.0,>=22.0 in /home/chengyuxuan/miniconda3/envs/sota_repo_LLaVA/lib/python3.10/site-packages (from gradio==4.16.0) (23.2.1)
+Requirement already satisfied: altair<6.0,>=4.2.0 in /home/chengyuxuan/miniconda3/envs/sota_repo_LLaVA/lib/python3.10/site-packages (from gradio==4.16.0) (5.5.0)
+Requirement already satisfied: fastapi in /home/chengyuxuan/miniconda3/envs/sota_repo_LLaVA/lib/python3.10/site-packages (from gradio==4.16.0) (0.136.1)
+Requirement already satisfied: ffmpy in /home/chengyuxuan/miniconda3/envs/sota_repo_LLaVA/lib/python3.10/site-packages (from gradio==4.16.0) (1.0.0)
+Requirement already satisfied: httpx in /home/chengyuxuan/miniconda3/envs/sota_repo_LLaVA/lib/python3.10/site-packages (from gradio==4.16.0) (0.24.0)
+Requirement already satisfied: huggingface-hub>=0.19.3 in /home/chengyuxuan/miniconda3/envs/sota_repo_LLaVA/lib/python3.10/site-packages (from gradio==4.16.0) (0.36.2)
+Requirement already satisfied: importlib-resources<7.0,>=1.3 in /home/chengyuxuan/miniconda3/envs/sota_repo_LLaVA/lib/python3.10/site-packages (from gradio==4.16.0) (6.5.2)
+Requirement already satisfied: jinja2<4.0 in /home/chengyuxuan/miniconda3/envs/sota_repo_LLaVA/lib/python3.10/site-packages (from gradio==4.16.0) (3.1.6)
+Requirement already satisfied: markupsafe~=2.0 in /home/chengyuxuan/miniconda3/envs/sota_repo_LLaVA/lib/python3.10/site-packages (from gradio==4.16.0) (2.1.5)
+Requirement already satisfied: matplotlib~=3.0 in /home/chengyuxuan/miniconda3/envs/sota_repo_LLaVA/lib/python3.10/site-packages (from gradio==4.16.0) (3.10.9)
+Requirement already satisfied: numpy~=1.0 in /home/chengyuxuan/miniconda3/envs/sota_repo_LLaVA/lib/python3.10/site-packages (from gradio==4.16.0) (1.26.4)
+Requirement already satisfied: orjson~=3.0 in /home/chengyuxuan/miniconda3/envs/sota_repo_LLaVA/lib/python3.10/site-packages (from gradio==4.16.0) (3.11.8)
+Requirement already satisfied: packaging in /home/chengyuxuan/miniconda3/envs/sota_repo_LLaVA/lib/python3.10/site-packages (from gradio==4.16.0) (26.0)
+Requirement already satisfied: pandas<3.0,>=1.0 in /home/chengyuxuan/miniconda3/envs/sota_repo_LLaVA/lib/python3.10/site-packages (from gradio==4.16.0) (2.3.3)
+Requirement already satisfied: pillow<11.0,>=8.0 in /home/chengyuxuan/miniconda3/envs/sota_repo_LLaVA/lib/python3.10/site-packages (from gradio==4.16.0) (10.4.0)
+Requirement already satisfied: pydantic>=2.0 in /home/chengyuxuan/miniconda3/envs/sota_repo_LLaVA/lib/python3.10/site-packages (from gradio==4.16.0) (2.13.3)
+Requirement already satisfied: pydub in /home/chengyuxuan/miniconda3/envs/sota_repo_LLaVA/lib/python3.10/site-packages (from gradio==4.16.0) (0.25.1)
+Requirement already satisfied: python-multipart in /home/chengyuxuan/miniconda3/envs/sota_repo_LLaVA/lib/python3.10/site-packages (from gradio==4.16.0) (0.0.27)
+Requirement already satisfied: pyyaml<7.0,>=5.0 in /home/chengyuxuan/miniconda3/envs/sota_repo_LLaVA/lib/python3.10/site-packages (from gradio==4.16.0) (6.0.3)
+Requirement already satisfied: ruff>=0.1.7 in /home/chengyuxuan/miniconda3/envs/sota_repo_LLaVA/lib/python3.10/site-packages (from gradio==4.16.0) (0.15.12)
+Requirement already satisfied: semantic-version~=2.0 in /home/chengyuxuan/miniconda3/envs/sota_repo_LLaVA/lib/python3.10/site-packages (from gradio==4.16.0) (2.10.0)
+Requirement already satisfied: tomlkit==0.12.0 in /home/chengyuxuan/miniconda3/envs/sota_repo_LLaVA/lib/python3.10/site-packages (from gradio==4.16.0) (0.12.0)
+Requirement already satisfied: typer<1.0,>=0.9 in /home/chengyuxuan/miniconda3/envs/sota_repo_LLaVA/lib/python3.10/site-packages (from typer[all]<1.0,>=0.9->gradio==4.16.0) (0.25.1)
+Requirement already satisfied: typing-extensions~=4.0 in /home/chengyuxuan/miniconda3/envs/sota_repo_LLaVA/lib/python3.10/site-packages (from gradio==4.16.0) (4.15.0)
+Requirement already satisfied: uvicorn>=0.14.0 in /home/chengyuxuan/miniconda3/envs/sota_repo_LLaVA/lib/python3.10/site-packages (from gradio==4.16.0) (0.46.0)
+Requirement already satisfied: fsspec in /home/chengyuxuan/miniconda3/envs/sota_repo_LLaVA/lib/python3.10/site-packages (from gradio_client==0.8.1) (2026.4.0)
+Requirement already satisfied: websockets<12.0,>=10.0 in /home/chengyuxuan/miniconda3/envs/sota_repo_LLaVA/lib/python3.10/site-packages (from gradio_client==0.8.1) (11.0.3)
+Requirement already satisfied: jsonschema>=3.0 in /home/chengyuxuan/miniconda3/envs/sota_repo_LLaVA/lib/python3.10/site-packages (from altair<6.0,>=4.2.0->gradio==4.16.0) (4.26.0)
+Requirement already satisfied: narwhals>=1.14.2 in /home/chengyuxuan/miniconda3/envs/sota_repo_LLaVA/lib/python3.10/site-packages (from altair<6.0,>=4.2.0->gradio==4.16.0) (2.20.0)
+Requirement already satisfied: contourpy>=1.0.1 in /home/chengyuxuan/miniconda3/envs/sota_repo_LLaVA/lib/python3.10/site-packages (from matplotlib~=3.0->gradio==4.16.0) (1.3.2)
+Requirement already satisfied: cycler>=0.10 in /home/chengyuxuan/miniconda3/envs/sota_repo_LLaVA/lib/python3.10/site-packages (from matplotlib~=3.0->gradio==4.16.0) (0.12.1)
+Requirement already satisfied: fonttools>=4.22.0 in /home/chengyuxuan/miniconda3/envs/sota_repo_LLaVA/lib/python3.10/site-packages (from matplotlib~=3.0->gradio==4.16.0) (4.62.1)
+Requirement already satisfied: kiwisolver>=1.3.1 in /home/chengyuxuan/miniconda3/envs/sota_repo_LLaVA/lib/python3.10/site-packages (from matplotlib~=3.0->gradio==4.16.0) (1.5.0)
+Requirement already satisfied: pyparsing>=3 in /home/chengyuxuan/miniconda3/envs/sota_repo_LLaVA/lib/python3.10/site-packages (from matplotlib~=3.0->gradio==4.16.0) (3.3.2)
+Requirement already satisfied: python-dateutil>=2.7 in /home/chengyuxuan/miniconda3/envs/sota_repo_LLaVA/lib/python3.10/site-packages (from matplotlib~=3.0->gradio==4.16.0) (2.9.0.post0)
+Requirement already satisfied: pytz>=2020.1 in /home/chengyuxuan/miniconda3/envs/sota_repo_LLaVA/lib/python3.10/site-packages (from pandas<3.0,>=1.0->gradio==4.16.0) (2026.2)
+Requirement already satisfied: tzdata>=2022.7 in /home/chengyuxuan/miniconda3/envs/sota_repo_LLaVA/lib/python3.10/site-packages (from pandas<3.0,>=1.0->gradio==4.16.0) (2026.2)
+Requirement already satisfied: click>=8.2.1 in /home/chengyuxuan/miniconda3/envs/sota_repo_LLaVA/lib/python3.10/site-packages (from typer<1.0,>=0.9->typer[all]<1.0,>=0.9->gradio==4.16.0) (8.3.3)
+Requirement already satisfied: shellingham>=1.3.0 in /home/chengyuxuan/miniconda3/envs/sota_repo_LLaVA/lib/python3.10/site-packages (from typer<1.0,>=0.9->typer[all]<1.0,>=0.9->gradio==4.16.0) (1.5.4)
+Requirement already satisfied: rich>=13.8.0 in /home/chengyuxuan/miniconda3/envs/sota_repo_LLaVA/lib/python3.10/site-packages (from typer<1.0,>=0.9->typer[all]<1.0,>=0.9->gradio==4.16.0) (15.0.0)
+Requirement already satisfied: annotated-doc>=0.0.2 in /home/chengyuxuan/miniconda3/envs/sota_repo_LLaVA/lib/python3.10/site-packages (from typer<1.0,>=0.9->typer[all]<1.0,>=0.9->gradio==4.16.0) (0.0.4)
+WARNING: typer 0.25.1 does not provide the extra 'all'
+Requirement already satisfied: filelock in /home/chengyuxuan/miniconda3/envs/sota_repo_LLaVA/lib/python3.10/site-packages (from huggingface-hub>=0.19.3->gradio==4.16.0) (3.29.0)
+Requirement already satisfied: hf-xet<2.0.0,>=1.1.3 in /home/chengyuxuan/miniconda3/envs/sota_repo_LLaVA/lib/python3.10/site-packages (from huggingface-hub>=0.19.3->gradio==4.16.0) (1.5.0)
+Requirement already satisfied: requests in /home/chengyuxuan/miniconda3/envs/sota_repo_LLaVA/lib/python3.10/site-packages (from huggingface-hub>=0.19.3->gradio==4.16.0) (2.33.1)
+Requirement already satisfied: tqdm>=4.42.1 in /home/chengyuxuan/miniconda3/envs/sota_repo_LLaVA/lib/python3.10/site-packages (from huggingface-hub>=0.19.3->gradio==4.16.0) (4.67.3)
+Requirement already satisfied: attrs>=22.2.0 in /home/chengyuxuan/miniconda3/envs/sota_repo_LLaVA/lib/python3.10/site-packages (from jsonschema>=3.0->altair<6.0,>=4.2.0->gradio==4.16.0) (26.1.0)
+Requirement already satisfied: jsonschema-specifications>=2023.03.6 in /home/chengyuxuan/miniconda3/envs/sota_repo_LLaVA/lib/python3.10/site-packages (from jsonschema>=3.0->altair<6.0,>=4.2.0->gradio==4.16.0) (2025.9.1)
+Requirement already satisfied: referencing>=0.28.4 in /home/chengyuxuan/miniconda3/envs/sota_repo_LLaVA/lib/python3.10/site-packages (from jsonschema>=3.0->altair<6.0,>=4.2.0->gradio==4.16.0) (0.37.0)
+Requirement already satisfied: rpds-py>=0.25.0 in /home/chengyuxuan/miniconda3/envs/sota_repo_LLaVA/lib/python3.10/site-packages (from jsonschema>=3.0->altair<6.0,>=4.2.0->gradio==4.16.0) (0.30.0)
+Requirement already satisfied: annotated-types>=0.6.0 in /home/chengyuxuan/miniconda3/envs/sota_repo_LLaVA/lib/python3.10/site-packages (from pydantic>=2.0->gradio==4.16.0) (0.7.0)
+Requirement already satisfied: pydantic-core==2.46.3 in /home/chengyuxuan/miniconda3/envs/sota_repo_LLaVA/lib/python3.10/site-packages (from pydantic>=2.0->gradio==4.16.0) (2.46.3)
+Requirement already satisfied: typing-inspection>=0.4.2 in /home/chengyuxuan/miniconda3/envs/sota_repo_LLaVA/lib/python3.10/site-packages (from pydantic>=2.0->gradio==4.16.0) (0.4.2)
+Requirement already satisfied: six>=1.5 in /home/chengyuxuan/miniconda3/envs/sota_repo_LLaVA/lib/python3.10/site-packages (from python-dateutil>=2.7->matplotlib~=3.0->gradio==4.16.0) (1.17.0)
+Requirement already satisfied: markdown-it-py>=2.2.0 in /home/chengyuxuan/miniconda3/envs/sota_repo_LLaVA/lib/python3.10/site-packages (from rich>=13.8.0->typer<1.0,>=0.9->typer[all]<1.0,>=0.9->gradio==4.16.0) (4.0.0)
+Requirement already satisfied: pygments<3.0.0,>=2.13.0 in /home/chengyuxuan/miniconda3/envs/sota_repo_LLaVA/lib/python3.10/site-packages (from rich>=13.8.0->typer<1.0,>=0.9->typer[all]<1.0,>=0.9->gradio==4.16.0) (2.20.0)
+Requirement already satisfied: mdurl~=0.1 in /home/chengyuxuan/miniconda3/envs/sota_repo_LLaVA/lib/python3.10/site-packages (from markdown-it-py>=2.2.0->rich>=13.8.0->typer<1.0,>=0.9->typer[all]<1.0,>=0.9->gradio==4.16.0) (0.1.2)
+Requirement already satisfied: h11>=0.8 in /home/chengyuxuan/miniconda3/envs/sota_repo_LLaVA/lib/python3.10/site-packages (from uvicorn>=0.14.0->gradio==4.16.0) (0.14.0)
+Requirement already satisfied: starlette>=0.46.0 in /home/chengyuxuan/miniconda3/envs/sota_repo_LLaVA/lib/python3.10/site-packages (from fastapi->gradio==4.16.0) (1.0.0)
+Requirement already satisfied: anyio<5,>=3.6.2 in /home/chengyuxuan/miniconda3/envs/sota_repo_LLaVA/lib/python3.10/site-packages (from starlette>=0.46.0->fastapi->gradio==4.16.0) (4.13.0)
+Requirement already satisfied: exceptiongroup>=1.0.2 in /home/chengyuxuan/miniconda3/envs/sota_repo_LLaVA/lib/python3.10/site-packages (from anyio<5,>=3.6.2->starlette>=0.46.0->fastapi->gradio==4.16.0) (1.3.1)
+Requirement already satisfied: idna>=2.8 in /home/chengyuxuan/miniconda3/envs/sota_repo_LLaVA/lib/python3.10/site-packages (from anyio<5,>=3.6.2->starlette>=0.46.0->fastapi->gradio==4.16.0) (3.13)
+Requirement already satisfied: certifi in /home/chengyuxuan/miniconda3/envs/sota_repo_LLaVA/lib/python3.10/site-packages (from httpx->gradio==4.16.0) (2026.4.22)
+Requirement already satisfied: httpcore<0.18.0,>=0.15.0 in /home/chengyuxuan/miniconda3/envs/sota_repo_LLaVA/lib/python3.10/site-packages (from httpx->gradio==4.16.0) (0.17.3)
+Requirement already satisfied: sniffio in /home/chengyuxuan/miniconda3/envs/sota_repo_LLaVA/lib/python3.10/site-packages (from httpx->gradio==4.16.0) (1.3.1)
+Requirement already satisfied: charset_normalizer<4,>=2 in /home/chengyuxuan/miniconda3/envs/sota_repo_LLaVA/lib/python3.10/site-packages (from requests->huggingface-hub>=0.19.3->gradio==4.16.0) (3.4.7)
+Requirement already satisfied: urllib3<3,>=1.26 in /home/chengyuxuan/miniconda3/envs/sota_repo_LLaVA/lib/python3.10/site-packages (from requests->huggingface-hub>=0.19.3->gradio==4.16.0) (2.6.3)
+[CodeAgentJob] node=executor
+[Step 7] SUCCESS: pip install gradio==4.16.0 gradio_client==0.8.1
+stdout: uan/miniconda3/envs/sota_repo_LLaVA/lib/python3.10/site-packages (from markdown-it-py>=2.2.0->rich>=13.8.0->typer<1.0,>=0.9->typer[all]<1.0,>=0.9->gradio==4.16.0) (0.1.2)
+Requirement already satisfied: h11>=0.8 in /home/chengyuxuan/miniconda3/envs/sota_repo_LLaVA/lib/python3.10/site-packages (from uvicorn>=0.14.0->gradio==4.16.0) (0.14.0)
+Requirement already satisfied: starlette>=0.46.0 in /home/chengyuxuan/miniconda3/envs/sota_repo_LLaVA/lib/python3.10/site-packages (from fastapi->gradio==4.16.
+[CodeAgent] Step 8/12 command timeout=3600s: pip install requests httpx==0.24.0 uvicorn fastapi
+[CodeAgent] Using pip mirror: https://pypi.tuna.tsinghua.edu.cn/simple (trusted_host=pypi.tuna.tsinghua.edu.cn, pip_timeout=3000s, retries=10)
+[CodeAgent] Using Hugging Face mirror: https://hf-mirror.com
+[CodeAgent] Using conda mirrors: https://mirrors.tuna.tsinghua.edu.cn/anaconda/pkgs/main, https://mirrors.tuna.tsinghua.edu.cn/anaconda/pkgs/r, https://mirrors.tuna.tsinghua.edu.cn/anaconda/cloud/conda-forge
+[CodeAgent] cwd=/home/chengyuxuan/Agent/sota-bench-agent/outputs/repos/visual_Instruction_Tuning/LLaVA
+[CodeAgent] run: conda run --no-capture-output -n sota_repo_LLaVA bash -c 'PIP_INDEX_URL='\''https://pypi.tuna.tsinghua.edu.cn/simple'\'' PIP_TRUSTED_HOST='\''pypi.tuna.tsinghua.edu.cn'\'' PIP_DEFAULT_TIMEOUT='\''3000'\'' PIP_RETRIES='\''10'\'' HF_ENDPOINT='\''https://hf-mirror.com'\'' HUGGINGFACE_HUB_ENDPOINT='\''https://hf-mirror.com'\'' pip install requests httpx==0.24.0 uvicorn fastapi --default-timeout=3000 --retries=10 --index-url https://pypi.tuna.tsinghua.edu.cn/simple --trusted-host pypi.tuna.tsinghua.edu.cn'
+Looking in indexes: https://pypi.tuna.tsinghua.edu.cn/simple
+Requirement already satisfied: requests in /home/chengyuxuan/miniconda3/envs/sota_repo_LLaVA/lib/python3.10/site-packages (2.33.1)
+Requirement already satisfied: httpx==0.24.0 in /home/chengyuxuan/miniconda3/envs/sota_repo_LLaVA/lib/python3.10/site-packages (0.24.0)
+Requirement already satisfied: uvicorn in /home/chengyuxuan/miniconda3/envs/sota_repo_LLaVA/lib/python3.10/site-packages (0.46.0)
+Requirement already satisfied: fastapi in /home/chengyuxuan/miniconda3/envs/sota_repo_LLaVA/lib/python3.10/site-packages (0.136.1)
+Requirement already satisfied: certifi in /home/chengyuxuan/miniconda3/envs/sota_repo_LLaVA/lib/python3.10/site-packages (from httpx==0.24.0) (2026.4.22)
+Requirement already satisfied: httpcore<0.18.0,>=0.15.0 in /home/chengyuxuan/miniconda3/envs/sota_repo_LLaVA/lib/python3.10/site-packages (from httpx==0.24.0) (0.17.3)
+Requirement already satisfied: idna in /home/chengyuxuan/miniconda3/envs/sota_repo_LLaVA/lib/python3.10/site-packages (from httpx==0.24.0) (3.13)
+Requirement already satisfied: sniffio in /home/chengyuxuan/miniconda3/envs/sota_repo_LLaVA/lib/python3.10/site-packages (from httpx==0.24.0) (1.3.1)
+Requirement already satisfied: h11<0.15,>=0.13 in /home/chengyuxuan/miniconda3/envs/sota_repo_LLaVA/lib/python3.10/site-packages (from httpcore<0.18.0,>=0.15.0->httpx==0.24.0) (0.14.0)
+Requirement already satisfied: anyio<5.0,>=3.0 in /home/chengyuxuan/miniconda3/envs/sota_repo_LLaVA/lib/python3.10/site-packages (from httpcore<0.18.0,>=0.15.0->httpx==0.24.0) (4.13.0)
+Requirement already satisfied: exceptiongroup>=1.0.2 in /home/chengyuxuan/miniconda3/envs/sota_repo_LLaVA/lib/python3.10/site-packages (from anyio<5.0,>=3.0->httpcore<0.18.0,>=0.15.0->httpx==0.24.0) (1.3.1)
+Requirement already satisfied: typing_extensions>=4.5 in /home/chengyuxuan/miniconda3/envs/sota_repo_LLaVA/lib/python3.10/site-packages (from anyio<5.0,>=3.0->httpcore<0.18.0,>=0.15.0->httpx==0.24.0) (4.15.0)
+Requirement already satisfied: charset_normalizer<4,>=2 in /home/chengyuxuan/miniconda3/envs/sota_repo_LLaVA/lib/python3.10/site-packages (from requests) (3.4.7)
+Requirement already satisfied: urllib3<3,>=1.26 in /home/chengyuxuan/miniconda3/envs/sota_repo_LLaVA/lib/python3.10/site-packages (from requests) (2.6.3)
+Requirement already satisfied: click>=7.0 in /home/chengyuxuan/miniconda3/envs/sota_repo_LLaVA/lib/python3.10/site-packages (from uvicorn) (8.3.3)
+Requirement already satisfied: starlette>=0.46.0 in /home/chengyuxuan/miniconda3/envs/sota_repo_LLaVA/lib/python3.10/site-packages (from fastapi) (1.0.0)
+Requirement already satisfied: pydantic>=2.9.0 in /home/chengyuxuan/miniconda3/envs/sota_repo_LLaVA/lib/python3.10/site-packages (from fastapi) (2.13.3)
+Requirement already satisfied: typing-inspection>=0.4.2 in /home/chengyuxuan/miniconda3/envs/sota_repo_LLaVA/lib/python3.10/site-packages (from fastapi) (0.4.2)
+Requirement already satisfied: annotated-doc>=0.0.2 in /home/chengyuxuan/miniconda3/envs/sota_repo_LLaVA/lib/python3.10/site-packages (from fastapi) (0.0.4)
+Requirement already satisfied: annotated-types>=0.6.0 in /home/chengyuxuan/miniconda3/envs/sota_repo_LLaVA/lib/python3.10/site-packages (from pydantic>=2.9.0->fastapi) (0.7.0)
+Requirement already satisfied: pydantic-core==2.46.3 in /home/chengyuxuan/miniconda3/envs/sota_repo_LLaVA/lib/python3.10/site-packages (from pydantic>=2.9.0->fastapi) (2.46.3)
+[CodeAgentJob] node=executor
+[Step 8] SUCCESS: pip install requests httpx==0.24.0 uvicorn fastapi
+stdout: >=3.0 in /home/chengyuxuan/miniconda3/envs/sota_repo_LLaVA/lib/python3.10/site-packages (from httpcore<0.18.0,>=0.15.0->httpx==0.24.0) (4.13.0)
+Requirement already satisfied: exceptiongroup>=1.0.2 in /home/chengyuxuan/miniconda3/envs/sota_repo_LLaVA/lib/python3.10/site-packages (from anyio<5.0,>=3.0->httpcore<0.18.0,>=0.15.0->httpx==0.24.0) (1.3.1)
+Requirement already satisfied: typing_extensions>=4.5 in /home/chengyuxuan/miniconda3/envs/sota_repo_LLaVA/lib/python3.10/site-packages (from anyio<5
+[CodeAgent] Step 9/12 command timeout=3600s: pip install einops==0.6.1 einops-exts==0.0.4 timm==0.6.13
+[CodeAgent] Using pip mirror: https://pypi.tuna.tsinghua.edu.cn/simple (trusted_host=pypi.tuna.tsinghua.edu.cn, pip_timeout=3000s, retries=10)
+[CodeAgent] Using Hugging Face mirror: https://hf-mirror.com
+[CodeAgent] Using conda mirrors: https://mirrors.tuna.tsinghua.edu.cn/anaconda/pkgs/main, https://mirrors.tuna.tsinghua.edu.cn/anaconda/pkgs/r, https://mirrors.tuna.tsinghua.edu.cn/anaconda/cloud/conda-forge
+[CodeAgent] cwd=/home/chengyuxuan/Agent/sota-bench-agent/outputs/repos/visual_Instruction_Tuning/LLaVA
+[CodeAgent] run: conda run --no-capture-output -n sota_repo_LLaVA bash -c 'PIP_INDEX_URL='\''https://pypi.tuna.tsinghua.edu.cn/simple'\'' PIP_TRUSTED_HOST='\''pypi.tuna.tsinghua.edu.cn'\'' PIP_DEFAULT_TIMEOUT='\''3000'\'' PIP_RETRIES='\''10'\'' HF_ENDPOINT='\''https://hf-mirror.com'\'' HUGGINGFACE_HUB_ENDPOINT='\''https://hf-mirror.com'\'' pip install einops==0.6.1 einops-exts==0.0.4 timm==0.6.13 --default-timeout=3000 --retries=10 --index-url https://pypi.tuna.tsinghua.edu.cn/simple --trusted-host pypi.tuna.tsinghua.edu.cn'
+Looking in indexes: https://pypi.tuna.tsinghua.edu.cn/simple
+Requirement already satisfied: einops==0.6.1 in /home/chengyuxuan/miniconda3/envs/sota_repo_LLaVA/lib/python3.10/site-packages (0.6.1)
+Requirement already satisfied: einops-exts==0.0.4 in /home/chengyuxuan/miniconda3/envs/sota_repo_LLaVA/lib/python3.10/site-packages (0.0.4)
+Requirement already satisfied: timm==0.6.13 in /home/chengyuxuan/miniconda3/envs/sota_repo_LLaVA/lib/python3.10/site-packages (0.6.13)
+Requirement already satisfied: torch>=1.7 in /home/chengyuxuan/miniconda3/envs/sota_repo_LLaVA/lib/python3.10/site-packages (from timm==0.6.13) (2.1.2)
+Requirement already satisfied: torchvision in /home/chengyuxuan/miniconda3/envs/sota_repo_LLaVA/lib/python3.10/site-packages (from timm==0.6.13) (0.16.2)
+Requirement already satisfied: pyyaml in /home/chengyuxuan/miniconda3/envs/sota_repo_LLaVA/lib/python3.10/site-packages (from timm==0.6.13) (6.0.3)
+Requirement already satisfied: huggingface-hub in /home/chengyuxuan/miniconda3/envs/sota_repo_LLaVA/lib/python3.10/site-packages (from timm==0.6.13) (0.36.2)
+Requirement already satisfied: filelock in /home/chengyuxuan/miniconda3/envs/sota_repo_LLaVA/lib/python3.10/site-packages (from torch>=1.7->timm==0.6.13) (3.29.0)
+Requirement already satisfied: typing-extensions in /home/chengyuxuan/miniconda3/envs/sota_repo_LLaVA/lib/python3.10/site-packages (from torch>=1.7->timm==0.6.13) (4.15.0)
+Requirement already satisfied: sympy in /home/chengyuxuan/miniconda3/envs/sota_repo_LLaVA/lib/python3.10/site-packages (from torch>=1.7->timm==0.6.13) (1.14.0)
+Requirement already satisfied: networkx in /home/chengyuxuan/miniconda3/envs/sota_repo_LLaVA/lib/python3.10/site-packages (from torch>=1.7->timm==0.6.13) (3.4.2)
+Requirement already satisfied: jinja2 in /home/chengyuxuan/miniconda3/envs/sota_repo_LLaVA/lib/python3.10/site-packages (from torch>=1.7->timm==0.6.13) (3.1.6)
+Requirement already satisfied: fsspec in /home/chengyuxuan/miniconda3/envs/sota_repo_LLaVA/lib/python3.10/site-packages (from torch>=1.7->timm==0.6.13) (2026.4.0)
+Requirement already satisfied: nvidia-cuda-nvrtc-cu12==12.1.105 in /home/chengyuxuan/miniconda3/envs/sota_repo_LLaVA/lib/python3.10/site-packages (from torch>=1.7->timm==0.6.13) (12.1.105)
+Requirement already satisfied: nvidia-cuda-runtime-cu12==12.1.105 in /home/chengyuxuan/miniconda3/envs/sota_repo_LLaVA/lib/python3.10/site-packages (from torch>=1.7->timm==0.6.13) (12.1.105)
+Requirement already satisfied: nvidia-cuda-cupti-cu12==12.1.105 in /home/chengyuxuan/miniconda3/envs/sota_repo_LLaVA/lib/python3.10/site-packages (from torch>=1.7->timm==0.6.13) (12.1.105)
+Requirement already satisfied: nvidia-cudnn-cu12==8.9.2.26 in /home/chengyuxuan/miniconda3/envs/sota_repo_LLaVA/lib/python3.10/site-packages (from torch>=1.7->timm==0.6.13) (8.9.2.26)
+Requirement already satisfied: nvidia-cublas-cu12==12.1.3.1 in /home/chengyuxuan/miniconda3/envs/sota_repo_LLaVA/lib/python3.10/site-packages (from torch>=1.7->timm==0.6.13) (12.1.3.1)
+Requirement already satisfied: nvidia-cufft-cu12==11.0.2.54 in /home/chengyuxuan/miniconda3/envs/sota_repo_LLaVA/lib/python3.10/site-packages (from torch>=1.7->timm==0.6.13) (11.0.2.54)
+Requirement already satisfied: nvidia-curand-cu12==10.3.2.106 in /home/chengyuxuan/miniconda3/envs/sota_repo_LLaVA/lib/python3.10/site-packages (from torch>=1.7->timm==0.6.13) (10.3.2.106)
+Requirement already satisfied: nvidia-cusolver-cu12==11.4.5.107 in /home/chengyuxuan/miniconda3/envs/sota_repo_LLaVA/lib/python3.10/site-packages (from torch>=1.7->timm==0.6.13) (11.4.5.107)
+Requirement already satisfied: nvidia-cusparse-cu12==12.1.0.106 in /home/chengyuxuan/miniconda3/envs/sota_repo_LLaVA/lib/python3.10/site-packages (from torch>=1.7->timm==0.6.13) (12.1.0.106)
+Requirement already satisfied: nvidia-nccl-cu12==2.18.1 in /home/chengyuxuan/miniconda3/envs/sota_repo_LLaVA/lib/python3.10/site-packages (from torch>=1.7->timm==0.6.13) (2.18.1)
+Requirement already satisfied: nvidia-nvtx-cu12==12.1.105 in /home/chengyuxuan/miniconda3/envs/sota_repo_LLaVA/lib/python3.10/site-packages (from torch>=1.7->timm==0.6.13) (12.1.105)
+Requirement already satisfied: triton==2.1.0 in /home/chengyuxuan/miniconda3/envs/sota_repo_LLaVA/lib/python3.10/site-packages (from torch>=1.7->timm==0.6.13) (2.1.0)
+Requirement already satisfied: nvidia-nvjitlink-cu12 in /home/chengyuxuan/miniconda3/envs/sota_repo_LLaVA/lib/python3.10/site-packages (from nvidia-cusolver-cu12==11.4.5.107->torch>=1.7->timm==0.6.13) (12.9.86)
+Requirement already satisfied: hf-xet<2.0.0,>=1.1.3 in /home/chengyuxuan/miniconda3/envs/sota_repo_LLaVA/lib/python3.10/site-packages (from huggingface-hub->timm==0.6.13) (1.5.0)
+Requirement already satisfied: packaging>=20.9 in /home/chengyuxuan/miniconda3/envs/sota_repo_LLaVA/lib/python3.10/site-packages (from huggingface-hub->timm==0.6.13) (26.0)
+Requirement already satisfied: requests in /home/chengyuxuan/miniconda3/envs/sota_repo_LLaVA/lib/python3.10/site-packages (from huggingface-hub->timm==0.6.13) (2.33.1)
+Requirement already satisfied: tqdm>=4.42.1 in /home/chengyuxuan/miniconda3/envs/sota_repo_LLaVA/lib/python3.10/site-packages (from huggingface-hub->timm==0.6.13) (4.67.3)
+Requirement already satisfied: MarkupSafe>=2.0 in /home/chengyuxuan/miniconda3/envs/sota_repo_LLaVA/lib/python3.10/site-packages (from jinja2->torch>=1.7->timm==0.6.13) (2.1.5)
+Requirement already satisfied: charset_normalizer<4,>=2 in /home/chengyuxuan/miniconda3/envs/sota_repo_LLaVA/lib/python3.10/site-packages (from requests->huggingface-hub->timm==0.6.13) (3.4.7)
+Requirement already satisfied: idna<4,>=2.5 in /home/chengyuxuan/miniconda3/envs/sota_repo_LLaVA/lib/python3.10/site-packages (from requests->huggingface-hub->timm==0.6.13) (3.13)
+Requirement already satisfied: urllib3<3,>=1.26 in /home/chengyuxuan/miniconda3/envs/sota_repo_LLaVA/lib/python3.10/site-packages (from requests->huggingface-hub->timm==0.6.13) (2.6.3)
+Requirement already satisfied: certifi>=2023.5.7 in /home/chengyuxuan/miniconda3/envs/sota_repo_LLaVA/lib/python3.10/site-packages (from requests->huggingface-hub->timm==0.6.13) (2026.4.22)
+Requirement already satisfied: mpmath<1.4,>=1.1.0 in /home/chengyuxuan/miniconda3/envs/sota_repo_LLaVA/lib/python3.10/site-packages (from sympy->torch>=1.7->timm==0.6.13) (1.3.0)
+Requirement already satisfied: numpy in /home/chengyuxuan/miniconda3/envs/sota_repo_LLaVA/lib/python3.10/site-packages (from torchvision->timm==0.6.13) (1.26.4)
+Requirement already satisfied: pillow!=8.3.*,>=5.3.0 in /home/chengyuxuan/miniconda3/envs/sota_repo_LLaVA/lib/python3.10/site-packages (from torchvision->timm==0.6.13) (10.4.0)
+[CodeAgentJob] node=executor
+[Step 9] SUCCESS: pip install einops==0.6.1 einops-exts==0.0.4 timm==0.6.13
+stdout: (from huggingface-hub->timm==0.6.13) (1.5.0)
+Requirement already satisfied: packaging>=20.9 in /home/chengyuxuan/miniconda3/envs/sota_repo_LLaVA/lib/python3.10/site-packages (from huggingface-hub->timm==0.6.13) (26.0)
+Requirement already satisfied: requests in /home/chengyuxuan/miniconda3/envs/sota_repo_LLaVA/lib/python3.10/site-packages (from huggingface-hub->timm==0.6.13) (2.33.1)
+Requirement already satisfied: tqdm>=4.42.1 in /home/chengyuxuan/miniconda3/envs/sota_repo_LLaVA/lib/python3.10/si
+[CodeAgent] Step 10/12 command timeout=3600s: HF_ENDPOINT=https://hf-mirror.com huggingface-cli download liuhaotian/llava-v1.5-7b --local-dir models/llava-v1.5-7b
+[CodeAgent] Using pip mirror: https://pypi.tuna.tsinghua.edu.cn/simple (trusted_host=pypi.tuna.tsinghua.edu.cn, pip_timeout=3000s, retries=10)
+[CodeAgent] Using Hugging Face mirror: https://hf-mirror.com
+[CodeAgent] Using conda mirrors: https://mirrors.tuna.tsinghua.edu.cn/anaconda/pkgs/main, https://mirrors.tuna.tsinghua.edu.cn/anaconda/pkgs/r, https://mirrors.tuna.tsinghua.edu.cn/anaconda/cloud/conda-forge
+[CodeAgent] cwd=/home/chengyuxuan/Agent/sota-bench-agent/outputs/repos/visual_Instruction_Tuning/LLaVA
+[CodeAgent] run: conda run --no-capture-output -n sota_repo_LLaVA bash -c 'PIP_INDEX_URL='\''https://pypi.tuna.tsinghua.edu.cn/simple'\'' PIP_TRUSTED_HOST='\''pypi.tuna.tsinghua.edu.cn'\'' PIP_DEFAULT_TIMEOUT='\''3000'\'' PIP_RETRIES='\''10'\'' HF_ENDPOINT='\''https://hf-mirror.com'\'' HUGGINGFACE_HUB_ENDPOINT='\''https://hf-mirror.com'\'' HF_ENDPOINT=https://hf-mirror.com huggingface-cli download liuhaotian/llava-v1.5-7b --local-dir models/llava-v1.5-7b'
+[33m⚠️  Warning: 'huggingface-cli download' is deprecated. Use 'hf download' instead.[0m
+
+Fetching 11 files:   0%|          | 0/11 [00:00<?, ?it/s]Downloading 'pytorch_model-00002-of-00002.bin' to 'models/llava-v1.5-7b/.cache/huggingface/download/HnkwBfZ0kY-ttHuN02vuxl1p6V0=.c0eb94eb3fa578a4c63567f2eca6b0acf6a44a891c257aca0df88ffa891de72e.incomplete'
+Downloading 'pytorch_model-00001-of-00002.bin' to 'models/llava-v1.5-7b/.cache/huggingface/download/fPHULxv55kAe7RSfHmmL42LIc1I=.492fdfa63cf314097d99da81a3586d54a97adc1471a0ae0535f5caa269b86314.incomplete'
+Downloading 'mm_projector.bin' to 'models/llava-v1.5-7b/.cache/huggingface/download/NRUs2AzHWcGkekTW7KYb6HFmz6w=.be33a3b477e091832a3c8a9fabf5769c43b4cb2c161fc8c464b7bb214f16143a.incomplete'
+Downloading '.gitattributes' to 'models/llava-v1.5-7b/.cache/huggingface/download/wPaCkH-WbT7GsmxMKKrNZTV4nSM=.a6344aac8c09253b3b630fb776ae94478aa0275b.incomplete'
+Downloading 'README.md' to 'models/llava-v1.5-7b/.cache/huggingface/download/Xn7B-BWUGOee2Y6hCZtEhtFu4BE=.1d4fd473f44e390c89c18175d9a7403e26000d37.incomplete'
+Downloading 'pytorch_model.bin.index.json' to 'models/llava-v1.5-7b/.cache/huggingface/download/8TePU6wZ6PO52hlgkfCnTYnlMSI=.239de7c61647372780b7546a8df572ed42f7fc57.incomplete'
+Download complete. Moving file to models/llava-v1.5-7b/.gitattributes
+
+Fetching 11 files:   9%|▉         | 1/11 [00:02<00:25,  2.59s/it]Download complete. Moving file to models/llava-v1.5-7b/README.md
+Downloading 'config.json' to 'models/llava-v1.5-7b/.cache/huggingface/download/8_PA_wEVGiVa2goH2H4KQOQpvVY=.0ce10a15ac0e34d9f7c25f598e6a237d88b99a46.incomplete'
+Download complete. Moving file to models/llava-v1.5-7b/pytorch_model.bin.index.json
+Download complete. Moving file to models/llava-v1.5-7b/config.json
+
+Fetching 11 files:  27%|██▋       | 3/11 [00:03<00:06,  1.15it/s]Downloading 'tokenizer.model' to 'models/llava-v1.5-7b/.cache/huggingface/download/7iVfz3cUOMr-hyjiqqRDHEwVBAM=.9e556afd44213b6bd1be2b850ebbbd98f5481437a8021afaf58ee7fb1818d347.incomplete'
+Downloading 'special_tokens_map.json' to 'models/llava-v1.5-7b/.cache/huggingface/download/ahkChHUJFxEmOdq5GDFEmerRzCY=.14761dcf1466dc232bd41de9c21d4c617b15755e.incomplete'
+Downloading 'generation_config.json' to 'models/llava-v1.5-7b/.cache/huggingface/download/3EVKVggOldJcKSsGjSdoUCN1AyQ=.0a2211d8cb8868624f2556fe27d138585e151fea.incomplete'
+Download complete. Moving file to models/llava-v1.5-7b/special_tokens_map.json
+Download complete. Moving file to models/llava-v1.5-7b/generation_config.json
+
+Fetching 11 files:  36%|███▋      | 4/11 [00:04<00:06,  1.01it/s]Download complete. Moving file to models/llava-v1.5-7b/tokenizer.model
+Downloading 'tokenizer_config.json' to 'models/llava-v1.5-7b/.cache/huggingface/download/vzaExXFZNBay89bvlQv-ZcI6BTg=.740756b4bef305e27d0bb4d2e1a40dd8847797f7.incomplete'
+Download complete. Moving file to models/llava-v1.5-7b/tokenizer_config.json
+Download complete. Moving file to models/llava-v1.5-7b/mm_projector.bin
+
+Fetching 11 files:  45%|████▌     | 5/11 [00:07<00:09,  1.57s/it]Error while downloading from https://cas-bridge.xethub.hf.co/xet-bridge-us/651effaf6d11340cd321f94b/83b28d7aa020e24d59659a5029210ffa4aab7257bad9cfbdc6a42b79be317c1e?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Content-Sha256=UNSIGNED-PAYLOAD&X-Amz-Credential=cas%2F20260507%2Fus-east-1%2Fs3%2Faws4_request&X-Amz-Date=20260507T062352Z&X-Amz-Expires=3600&X-Amz-Signature=9b562bbaaef3e8c23c43fab554f7aa4de63ff1a1cbe5528ff870e41955d18c47&X-Amz-SignedHeaders=host&X-Xet-Cas-Uid=62171e3b6a99db28e0b3159d&response-content-disposition=inline%3B+filename*%3DUTF-8%27%27pytorch_model-00002-of-00002.bin%3B+filename%3D%22pytorch_model-00002-of-00002.bin%22%3B&response-content-type=application%2Foctet-stream&x-amz-checksum-mode=ENABLED&x-id=GetObject&Expires=1778138632&Policy=eyJTdGF0ZW1lbnQiOlt7IkNvbmRpdGlvbiI6eyJEYXRlTGVzc1RoYW4iOnsiQVdTOkVwb2NoVGltZSI6MTc3ODEzODYzMn19LCJSZXNvdXJjZSI6Imh0dHBzOi8vY2FzLWJyaWRnZS54ZXRodWIuaGYuY28veGV0LWJyaWRnZS11cy82NTFlZmZhZjZkMTEzNDBjZDMyMWY5NGIvODNiMjhkN2FhMDIwZTI0ZDU5NjU5YTUwMjkyMTBmZmE0YWFiNzI1N2JhZDljZmJkYzZhNDJiNzliZTMxN2MxZSoifV19&Signature=ql0Ct0vk%7EfFfbAI3-spHrcb%7EIv4JcXC3Uf98Ufj9gE%7Efz1C76e5RVIYJ9PVYjAXQmmhZe2kOgnP%7EQMbjVdNis%7ESkZ-JLxDlqTX7OXPUeIgsRy8wB4hc3-RVabAGjoGpMTCucpZcZPF70oinbR0pXo876QjCklXJH53YBxRUW4p9pDUFvU12jL8TDi0PlWKfL-Odhr9ZyjuaWW-OzPjfOwL6YYpLUpLoO-vmzXti9lhNni9YJfnc5sJPukL5dicKj-5jcqmZ89AcHFaGUGEAo9GOo9McbViFaOLcYjDYsDwR17IhJL8-Dtwk4PAQ%7EjCLQnKAcv4t4kiYkoNs9ep9jMA__&Key-Pair-Id=K2L8F4GPSG1IFC: HTTPSConnectionPool(host='cas-bridge.xethub.hf.co', port=443): Read timed out.
+Trying to resume download...
+Download complete. Moving file to models/llava-v1.5-7b/pytorch_model-00002-of-00002.bin
+Download complete. Moving file to models/llava-v1.5-7b/pytorch_model-00001-of-00002.bin
+
+Fetching 11 files:  55%|█████▍    | 6/11 [07:39<12:10, 146.17s/it]
+Fetching 11 files: 100%|██████████| 11/11 [07:39<00:00, 41.75s/it]
+/home/chengyuxuan/Agent/sota-bench-agent/outputs/repos/visual_Instruction_Tuning/LLaVA/models/llava-v1.5-7b
+[CodeAgentJob] node=executor
+[Step 10] SUCCESS: HF_ENDPOINT=https://hf-mirror.com huggingface-cli download liuhaotian/llava-v1.5-7b --local-dir models/llava-v1.5-7b
+stdout: 0:09,  1.57s/it]Error while downloading from https://cas-bridge.xethub.hf.co/xet-bridge-us/651effaf6d11340cd321f94b/83b28d7aa020e24d59659a5029210ffa4aab7257bad9cfbdc6a42b79be317c1e?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Content-Sha256=UNSIGNED-PAYLOAD&X-Amz-Credential=cas%2F20260507%2Fus-east-1%2Fs3%2Faws4_request&X-Amz-Date=20260507T062352Z&X-Amz-Expires=3600&X-Amz-Signature=9b562bbaaef3e8c23c43fab554f7aa4de63ff1a1cbe5528ff870e41955d18c47&X-Amz-SignedHeaders=host&X-Xet-Cas-Uid=62171e3b6a99db28e
+[CodeAgent] Step 11/12 command timeout=3600s: python predict.py
+[CodeAgent] Using pip mirror: https://pypi.tuna.tsinghua.edu.cn/simple (trusted_host=pypi.tuna.tsinghua.edu.cn, pip_timeout=3000s, retries=10)
+[CodeAgent] Using Hugging Face mirror: https://hf-mirror.com
+[CodeAgent] Using conda mirrors: https://mirrors.tuna.tsinghua.edu.cn/anaconda/pkgs/main, https://mirrors.tuna.tsinghua.edu.cn/anaconda/pkgs/r, https://mirrors.tuna.tsinghua.edu.cn/anaconda/cloud/conda-forge
+[CodeAgent] cwd=/home/chengyuxuan/Agent/sota-bench-agent/outputs/repos/visual_Instruction_Tuning/LLaVA
+[CodeAgent] run: conda run --no-capture-output -n sota_repo_LLaVA bash -c 'PIP_INDEX_URL='\''https://pypi.tuna.tsinghua.edu.cn/simple'\'' PIP_TRUSTED_HOST='\''pypi.tuna.tsinghua.edu.cn'\'' PIP_DEFAULT_TIMEOUT='\''3000'\'' PIP_RETRIES='\''10'\'' HF_ENDPOINT='\''https://hf-mirror.com'\'' HUGGINGFACE_HUB_ENDPOINT='\''https://hf-mirror.com'\'' python predict.py'
+/home/chengyuxuan/miniconda3/envs/sota_repo_LLaVA/lib/python3.10/site-packages/torch/cuda/__init__.py:51: FutureWarning: The pynvml package is deprecated. Please install nvidia-ml-py instead. If you did not install pynvml directly, please report this to the maintainers of the package that installed pynvml for you.
+  import pynvml  # type: ignore[import]
+[2026-05-07 14:31:34,094] [INFO] [real_accelerator.py:161:get_accelerator] Setting ds_accelerator to cuda (auto detect)
+Traceback (most recent call last):
+  File "/home/chengyuxuan/Agent/sota-bench-agent/outputs/repos/visual_Instruction_Tuning/LLaVA/predict.py", line 15, in <module>
+    from cog import BasePredictor, Input, Path, ConcatenateIterator
+ModuleNotFoundError: No module named 'cog'
+ERROR conda.cli.main_run:execute(142): `conda run bash -c PIP_INDEX_URL='https://pypi.tuna.tsinghua.edu.cn/simple' PIP_TRUSTED_HOST='pypi.tuna.tsinghua.edu.cn' PIP_DEFAULT_TIMEOUT='3000' PIP_RETRIES='10' HF_ENDPOINT='https://hf-mirror.com' HUGGINGFACE_HUB_ENDPOINT='https://hf-mirror.com' python predict.py` failed. (See above for error)
+[CodeAgentJob] node=executor
+[Step 11] FAILED (exit 1): python predict.py
+stderr: /home/chengyuxuan/miniconda3/envs/sota_repo_LLaVA/lib/python3.10/site-packages/torch/cuda/__init__.py:51: FutureWarning: The pynvml package is deprecated. Please install nvidia-ml-py instead. If you did not install pynvml directly, please report this to the maintainers of the package that installed pynvml for you.
+  import pynvml  # type: ignore[import]
+[2026-05-07 14:31:34,094] [INFO] [real_accelerator.py:161:get_accelerator] Setting ds_accelerator to cuda (auto detect)
+Traceback (most recent call last):
+  File "/home/chengyuxuan/Agent/sota-bench-agent/outputs/repos/visual_Instruction_Tuning/LLaVA/predict.py", line 15, in <module>
+    from cog import BasePredictor, Input, Path, ConcatenateIterator
+ModuleNotFoundError: No module named 'cog'
+ERROR conda.cli.main_run:execute(142): `conda run bash -c PIP_INDEX_URL='https://pypi.tuna.tsinghua.edu.cn/simple' PIP_TRUSTED_HOST='pypi.tuna.tsinghua.edu.cn' PIP_DEFAULT_TIMEOUT='3000' PIP_RETRIES='10' HF_ENDPOINT='https://hf-mirror.com' HUGGINGFA
+[CodeAgentJob] node=error_analyzer
+Error analysis: 缺少依赖模块 'cog'
+[CodeAgent] Using pip mirror: https://pypi.tuna.tsinghua.edu.cn/simple (trusted_host=pypi.tuna.tsinghua.edu.cn, pip_timeout=3000s, retries=10)
+[CodeAgent] Using Hugging Face mirror: https://hf-mirror.com
+[CodeAgent] Using conda mirrors: https://mirrors.tuna.tsinghua.edu.cn/anaconda/pkgs/main, https://mirrors.tuna.tsinghua.edu.cn/anaconda/pkgs/r, https://mirrors.tuna.tsinghua.edu.cn/anaconda/cloud/conda-forge
+[CodeAgent] cwd=/home/chengyuxuan/Agent/sota-bench-agent/outputs/repos/visual_Instruction_Tuning/LLaVA
+[CodeAgent] run: conda run --no-capture-output -n sota_repo_LLaVA bash -c 'PIP_INDEX_URL='\''https://pypi.tuna.tsinghua.edu.cn/simple'\'' PIP_TRUSTED_HOST='\''pypi.tuna.tsinghua.edu.cn'\'' PIP_DEFAULT_TIMEOUT='\''3000'\'' PIP_RETRIES='\''10'\'' HF_ENDPOINT='\''https://hf-mirror.com'\'' HUGGINGFACE_HUB_ENDPOINT='\''https://hf-mirror.com'\'' pip install cog --default-timeout=3000 --retries=10 --index-url https://pypi.tuna.tsinghua.edu.cn/simple --trusted-host pypi.tuna.tsinghua.edu.cn'
+Looking in indexes: https://pypi.tuna.tsinghua.edu.cn/simple
+Collecting cog
+  Downloading https://pypi.tuna.tsinghua.edu.cn/packages/56/d4/083e87023ae303de80ba03426e91bca7af0e243c5510e7ee93a0e59361b6/cog-0.19.3-py3-none-any.whl (43 kB)
+Requirement already satisfied: typing_extensions>=4.0 in /home/chengyuxuan/miniconda3/envs/sota_repo_LLaVA/lib/python3.10/site-packages (from cog) (4.15.0)
+Requirement already satisfied: pyyaml>=6.0 in /home/chengyuxuan/miniconda3/envs/sota_repo_LLaVA/lib/python3.10/site-packages (from cog) (6.0.3)
+Collecting structlog>=21.0.0 (from cog)
+  Downloading https://pypi.tuna.tsinghua.edu.cn/packages/a8/45/a132b9074aa18e799b891b91ad72133c98d8042c70f6240e4c5f9dabee2f/structlog-25.5.0-py3-none-any.whl (72 kB)
+Requirement already satisfied: requests>=2.25.0 in /home/chengyuxuan/miniconda3/envs/sota_repo_LLaVA/lib/python3.10/site-packages (from cog) (2.33.1)
+Collecting coglet<1.0,>=0.19.3 (from cog)
+  Downloading https://pypi.tuna.tsinghua.edu.cn/packages/b4/42/188cfe491ed8011836f5ff1baafb261b7eda057d96f9f5de8830c7221341/coglet-0.19.3-cp310-abi3-manylinux_2_17_x86_64.manylinux2014_x86_64.whl (6.0 MB)
+     ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 6.0/6.0 MB 4.5 MB/s  0:00:01
+Requirement already satisfied: charset_normalizer<4,>=2 in /home/chengyuxuan/miniconda3/envs/sota_repo_LLaVA/lib/python3.10/site-packages (from requests>=2.25.0->cog) (3.4.7)
+Requirement already satisfied: idna<4,>=2.5 in /home/chengyuxuan/miniconda3/envs/sota_repo_LLaVA/lib/python3.10/site-packages (from requests>=2.25.0->cog) (3.13)
+Requirement already satisfied: urllib3<3,>=1.26 in /home/chengyuxuan/miniconda3/envs/sota_repo_LLaVA/lib/python3.10/site-packages (from requests>=2.25.0->cog) (2.6.3)
+Requirement already satisfied: certifi>=2023.5.7 in /home/chengyuxuan/miniconda3/envs/sota_repo_LLaVA/lib/python3.10/site-packages (from requests>=2.25.0->cog) (2026.4.22)
+Installing collected packages: structlog, coglet, cog
+
+Successfully installed cog-0.19.3 coglet-0.19.3 structlog-25.5.0
+[CodeAgent] Fix command OK in conda env: pip install cog
+[CodeAgentJob] node=patch_generator
+Fix command OK in conda env: pip install cog
+[CodeAgent] Step 11/12 command timeout=3600s: python predict.py
+[CodeAgent] Using pip mirror: https://pypi.tuna.tsinghua.edu.cn/simple (trusted_host=pypi.tuna.tsinghua.edu.cn, pip_timeout=3000s, retries=10)
+[CodeAgent] Using Hugging Face mirror: https://hf-mirror.com
+[CodeAgent] Using conda mirrors: https://mirrors.tuna.tsinghua.edu.cn/anaconda/pkgs/main, https://mirrors.tuna.tsinghua.edu.cn/anaconda/pkgs/r, https://mirrors.tuna.tsinghua.edu.cn/anaconda/cloud/conda-forge
+[CodeAgent] cwd=/home/chengyuxuan/Agent/sota-bench-agent/outputs/repos/visual_Instruction_Tuning/LLaVA
+[CodeAgent] run: conda run --no-capture-output -n sota_repo_LLaVA bash -c 'PIP_INDEX_URL='\''https://pypi.tuna.tsinghua.edu.cn/simple'\'' PIP_TRUSTED_HOST='\''pypi.tuna.tsinghua.edu.cn'\'' PIP_DEFAULT_TIMEOUT='\''3000'\'' PIP_RETRIES='\''10'\'' HF_ENDPOINT='\''https://hf-mirror.com'\'' HUGGINGFACE_HUB_ENDPOINT='\''https://hf-mirror.com'\'' python predict.py'
+/home/chengyuxuan/miniconda3/envs/sota_repo_LLaVA/lib/python3.10/site-packages/torch/cuda/__init__.py:51: FutureWarning: The pynvml package is deprecated. Please install nvidia-ml-py instead. If you did not install pynvml directly, please report this to the maintainers of the package that installed pynvml for you.
+  import pynvml  # type: ignore[import]
+[2026-05-07 14:31:47,310] [INFO] [real_accelerator.py:161:get_accelerator] Setting ds_accelerator to cuda (auto detect)
+[CodeAgentJob] node=executor
+[Step 11] SUCCESS: python predict.py
+stdout: /home/chengyuxuan/miniconda3/envs/sota_repo_LLaVA/lib/python3.10/site-packages/torch/cuda/__init__.py:51: FutureWarning: The pynvml package is deprecated. Please install nvidia-ml-py instead. If you did not install pynvml directly, please report this to the maintainers of the package that installed pynvml for you.
+  import pynvml  # type: ignore[import]
+[2026-05-07 14:31:47,310] [INFO] [real_accelerator.py:161:get_accelerator] Setting ds_accelerator to cuda (auto detect)
+
+[CodeAgentJob] node=finalize_success
+Code reproduction completed successfully
+[CodeAgentJob] final={"status": "success", "reward": 1.0, "execution_logs": ["Code reproduction completed successfully"]}
+[CodeAgentJob] reproduction_report=/home/chengyuxuan/Agent/sota-bench-agent/outputs/repos/visual_Instruction_Tuning/LLaVA/reproduction_report.md
+[CodeAgentJob] finished status=success

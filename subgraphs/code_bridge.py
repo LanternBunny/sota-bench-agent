@@ -7,6 +7,10 @@ from config import MAX_CODE_FIX_LOOPS
 
 
 class CodeBridgeState(TypedDict, total=False):
+    topic: str
+    workspace_name: str
+    base_env: str
+    auto_reproduce_code: bool
     target_repo_url: str
 
     repo_url: str
@@ -39,6 +43,8 @@ def _init_code_agent(state: CodeBridgeState) -> dict:
         }
     return {
         "repo_url": repo_url,
+        "workspace_name": state.get("workspace_name") or state.get("topic", ""),
+        "base_env": state.get("base_env", ""),
         "fix_count": 0,
         "max_fixes": state.get("max_fixes", MAX_CODE_FIX_LOOPS),
         "status": "pending",

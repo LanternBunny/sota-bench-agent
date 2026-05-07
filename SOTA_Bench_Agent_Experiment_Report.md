@@ -43,6 +43,10 @@ SOTA-Bench Agent 的目标不是单点问答，而是把一套完整的科研工
 | Tavily 每轮返回条数 | 5 | [agents/search_agent.py](agents/search_agent.py) | 控制每个 query 的搜索规模 |
 | Paper Filter 截断数 | 20 | [agents/paper_filter.py](agents/paper_filter.py) | 控制进入 LLM 的上下文量 |
 | 代码抽取验证窗口 | 前 15 条搜索结果 | [agents/info_extractor.py](agents/info_extractor.py) | 兼顾覆盖和上下文长度 |
+| 复现命令超时 | `3600s` | [code_agent/executor.py](code_agent/executor.py) | 避免大模型仓库安装和下载被过早杀死 |
+| Git 克隆超时 | `1200s` | [start.sh](start.sh)、[code_agent/repo_fetcher.py](code_agent/repo_fetcher.py) | 支撑较大仓库浅克隆 |
+| HF 下载重试 | 3 次 | [code_agent/executor.py](code_agent/executor.py) | 处理 Xet/CAS 读超时和临时网络错误 |
+| PyTorch wheel 源 | `cu121` | [code_agent/executor.py](code_agent/executor.py) | 替代 Conda `pytorch-cuda` 缺包场景 |
 
 ## 2. 总体工作流
 
@@ -154,6 +158,21 @@ Report Writer 负责把调研阶段的结构化结果转化成自然语言报告
 
 这个附录的意义在于把“生成结果”与“运行过程”绑定起来。报告不只是研究结论，也包含了智能体如何一步步得到这些结论的过程信息，这对实验复盘很重要。
 
+### 3.8 Prompt 设计思想
+
+本项目没有把所有能力塞进一个超级 prompt，而是把 prompt 按 Agent 职责拆开。这样每个 prompt 只约束一个环节，输出格式更稳定，也方便通过实验单独修改和消融。
+
+| Prompt | 设计目标 | 关键约束 | 下游收益 |
+|---|---|---|---|
+| `QUERY_PLANNER_PROMPT` | 把主题扩展成多角度检索词 | 覆盖综述、benchmark、代码、最新年份、具体方法 | 提高论文召回率，减少单关键词偏差 |
+| `EXTRACT_PROMPT` | 从搜索结果抽取论文信息 | 输出 JSON；`code_url` 只能来自原文真实链接；禁止编造 GitHub | 降低结构化抽取幻觉，给复现分支提供可信入口 |
+| `REFLECT_PROMPT` | 评估当前结果质量 | 输出分数、缺失维度、查询修正、是否继续 | 把主观质量判断转为图路由信号 |
+| `REPORT_PROMPT` | 生成最终 Markdown 报告 | 围绕方法、数据集、benchmark、趋势组织 | 让报告稳定适合阅读和汇报 |
+| `EXECUTION_PLANNER_PROMPT` | 从 README/目录树生成命令计划 | 只能用真实文件；禁止 Conda 激活类命令；HF 下载用镜像 CLI；PyTorch CUDA 用 wheel | 降低复现计划中的无效命令 |
+| `ERROR_ANALYZER_PROMPT` | 根据报错生成修复动作 | 严格 JSON；TypeError 必须参考源码上下文；依赖/命令/代码修复类型分离 | 让 Patch Generator 可以机械执行修复建议 |
+
+这里的 prompt 设计有三个原则：第一，输出必须结构化，尽量用 JSON 或 Markdown 固定形态；第二，把“禁止事项”写清楚，例如禁止编造文件、禁止编造代码链接、禁止跳过 HF 下载；第三，把确定性规则前置到执行器，例如镜像改写、命令过滤和错误分类，不把所有稳定性都寄托在 LLM 上。
+
 ## 4. Code Agent Subgraph 核心模块详细设计
 
 当系统识别到有值得复现的 GitHub 代码时，就会进入代码复现子图。这个子图的设计思路非常接近实际工程师的排错流程：先拉代码，再看结构，再想怎么跑，跑失败后看错误，再做修复。
@@ -204,6 +223,17 @@ Execution Planner 的职责是把仓库信息翻译成可执行命令序列。�
 
 这个节点解决的是“从自然语言项目描述到具体命令”的转换问题。很多仓库并没有统一入口，直接盲跑通常会失败；有了执行规划，系统至少先有了一条合理的尝试路径。
 
+在 LLaVA 等视觉语言模型仓库的复现实验中，执行计划最容易犯的错误是把 README 中的人类交互式步骤原样搬过来，例如 `conda init bash`、`conda activate llava`，或者把项目内部 `load_pretrained_model` 当成模型下载命令。当前实现针对这些问题加入了双层防护：
+
+| 防护层 | 具体设计 | 目的 |
+|---|---|---|
+| Prompt 约束 | 明确禁止 `conda create/activate/deactivate/init` | 执行器已经统一管理环境，计划不应再创建新环境 |
+| Prompt 约束 | 只能引用仓库结构中真实存在的文件 | 避免生成 `python demo.py` 但仓库没有 `demo.py` |
+| Prompt 约束 | HF 模型下载优先 `huggingface-cli download` | 把“下载”和“加载模型”分开，避免调用函数签名错误 |
+| 确定性过滤 | `_is_valid_command` 丢弃空 `python`、不存在的 requirements/setup、Conda 激活类命令 | 即使 LLM 违规，执行前也能拦截 |
+
+这个设计体现了“LLM 规划 + 规则校验”的组合思路。LLM 负责理解 README 和生成候选步骤，规则系统负责保证命令至少是可执行、可定位、与当前自动环境不冲突的。
+
 ### 4.4 Executor（环境隔离与沙盒执行器）
 
 Executor 是代码复现子图里最接近真实执行环境的模块。它的核心思想是把每个仓库放进独立环境里跑，避免依赖冲突污染主环境，同时保留标准输出和标准错误用于后续分析。
@@ -213,8 +243,11 @@ Executor 是代码复现子图里最接近真实执行环境的模块。它的�
 | 环境命名 | `sota_repo_{repo_name}` | 为每个仓库隔离依赖 |
 | 环境创建 | `conda create -n ... python=3.10` | 保证基础运行环境一致 |
 | 命令执行 | `conda run --no-capture-output` | 在目标环境中执行脚本 |
-| 超时控制 | `TIMEOUT = 180` | 避免命令卡死 |
+| 超时控制 | `TIMEOUT = 3600` | 避免大模型安装和下载被过早杀死 |
 | 错误分类 | `_classify_error` | 为后续修复提供粗粒度信号 |
+| 镜像注入 | `_normalize_reproduction_command` | 为 pip、conda、HF 下载注入国内可用源 |
+| PyTorch 改写 | `_normalize_pytorch_conda_command` | 把 `pytorch-cuda` Conda 安装改为 pip wheel |
+| HF 重试 | `_is_hf_download_command` + `_is_retryable_hf_download_error` | 下载中断后自动重试，不直接放弃 |
 
 在实现上，系统会基于仓库名称创建对应的 Conda 环境，命名规则为 `sota_repo_{repo_name}`。第一次执行时会检查环境是否存在，如果没有则创建 Python 3.10 环境。随后每个命令都会通过 `conda run --no-capture-output` 在该环境下执行。
 
@@ -224,6 +257,20 @@ Executor 是代码复现子图里最接近真实执行环境的模块。它的�
 3. 命令超时，标记为 timeout，作为一种特殊错误处理。
 
 错误类型会做粗分类，例如缺少模块、导入错误、文件不存在、语法错误、GPU 相关错误、权限错误、内存错误等。这个分类本身不一定能直接修复，但能帮助后面的 LLM 更快定位问题。
+
+在最新版本中，错误分类顺序也做了工程修正：`TypeError` 会优先被识别为 `type_error`，再判断 CUDA/GPU。这样可以避免日志里出现 CUDA 初始化文本时，把普通函数签名错误误判成 GPU 错误。依赖求解失败如 `PackagesNotFoundError`、`could not solve` 会被识别为 `dependency_solver_error`，HF/Xet 下载超时会被识别为 `hf_download_timeout`。
+
+针对网络与镜像问题，Executor 不再只是原样执行命令，而是在执行前统一规范化：
+
+| 场景 | 改写/注入策略 | 原因 |
+|---|---|---|
+| 普通 `pip install` | 注入 `PIP_INDEX_URL=https://pypi.tuna.tsinghua.edu.cn/simple`、`--default-timeout=3000`、`--retries=10` | 国内网络下提升安装稳定性 |
+| PyTorch 依赖 | 保留或注入 `--index-url https://download.pytorch.org/whl/cu121` | PyTorch CUDA wheel 不应走普通 PyPI 镜像 |
+| `conda install pytorch-cuda=12.1` | 改写为 `pip install torch torchvision torchaudio --index-url https://download.pytorch.org/whl/cu121` | Conda 镜像常缺 `pytorch-cuda` 包 |
+| Conda 安装/建环境 | 注入清华 Conda channel 和 `--override-channels` | 避免回落默认上游 channel |
+| HF 下载 | 注入 `HF_ENDPOINT=https://hf-mirror.com`、`HF_HUB_DISABLE_XET=1`、下载/ETag 超时 | 降低 Hugging Face 和 Xet CAS 网络失败概率 |
+
+HF 下载命令还有专门的重试逻辑。只要命令包含 `huggingface-cli download`、`hf download`、`snapshot_download`、`hf_hub_download`、`from_pretrained` 或 HF 域名，执行器就把它识别为模型下载步骤。如果 stderr 中出现 `Read timed out`、`HTTPSConnectionPool`、`cas-bridge.xethub.hf.co`、`connection reset`、`incomplete read` 等可重试错误，执行器会中断当前失败尝试，等待后再次下载，而不是让 Error Analyzer 直接跳过模型文件。
 
 Executor 的本质是把“执行”与“观察”绑定在一起。它不只是跑命令，还记录足够多的执行痕迹，让系统有机会进行后续纠错。
 
@@ -235,6 +282,12 @@ LLM 输出的分析结果通常包括根因、修复类型、修复命令和需�
 
 这个节点的价值在于把“错误”变成“可执行的修复建议”。在自动化复现里，失败不是终点，关键是失败后能否给出下一步最合理动作。
 
+Error Analyzer 的最新设计不是纯 LLM 判断，而是“确定性分析优先，LLM 分析兜底”。例如当错误信息同时包含 `pytorch-cuda` 和 `PackagesNotFoundError` 时，系统不再询问 LLM 应该加哪个 Conda channel，而是直接返回 `change_command`，把命令改成 PyTorch wheel 安装。这类问题已经有明确工程解，不需要让模型自由发挥。
+
+另一个关键设计是源码上下文注入。对于形如 `python -c "from llava.model.builder import load_pretrained_model; ..."` 的命令，如果报错是 TypeError 缺参数，系统会从仓库内找到 `llava/model/builder.py`，抽取 `def load_pretrained_model(...)` 起始的一段源码，作为 `{source_context}` 注入 `ERROR_ANALYZER_PROMPT`。这样模型修复命令时看到的是真实函数签名，而不是根据函数名猜参数。
+
+这一步解决了自动复现中非常常见的问题：README 或模型加载示例会随着版本变化失效，LLM 如果只看报错文本，很容易猜错参数；加入源码上下文后，修复建议可以基于实际代码。
+
 ### 4.6 Patch Generator（自动补丁部署器）
 
 Patch Generator 负责把错误分析结果真正落地。它支持三类典型修复：一是直接执行环境修复命令，二是替换当前执行计划中的命令，三是对源码做字符串级替换。
@@ -244,6 +297,32 @@ Patch Generator 负责把错误分析结果真正落地。它支持三类典型�
 修复过程中，`fix_count` 会递增，作为最大修复次数的统计。若累计修复超过 `MAX_CODE_FIX_LOOPS`，系统就会放弃当前仓库，避免无限循环。
 
 这个节点体现的是“从建议到动作”的最后一跳。没有它，错误分析只能停留在文字层；有了它，系统才真正具备闭环修复能力。
+
+### 4.7 Code Agent Graph 的控制流思想
+
+Code Agent Graph 的重点不是一次性跑完所有命令，而是把每个命令执行后的状态反馈回图中。它的控制策略可以概括为：
+
+1. 如果当前步骤成功，则 `current_step + 1`，继续执行下一条命令。
+2. 如果所有步骤成功，则标记 `success` 并写出复现报告。
+3. 如果当前步骤失败，且 `fix_count < MAX_CODE_FIX_LOOPS`，进入 Error Analyzer 和 Patch Generator。
+4. 如果修复次数耗尽，标记失败并保留完整日志。
+
+这个设计把代码复现建模成一个有限状态机。每个状态都可观测、可记录、可恢复；失败不是异常退出，而是进入图中的分析和修复分支。相比一个 Bash 脚本从头跑到尾，这种图式控制更适合 Agent，因为 LLM 只需要在局部状态上做决策，不需要一次性掌控整个工程。
+
+### 4.8 LLaVA 复现问题带来的设计经验
+
+LLaVA 复现实验暴露的问题非常适合作为答辩案例，因为它覆盖了自动复现最典型的难点：环境、依赖、模型下载、函数签名和错误分类。
+
+| 暴露问题 | 根因 | 系统改进 |
+|---|---|---|
+| 计划生成 `conda create/activate/init` | README 是给人类 shell 使用的，不适合自动执行器 | Planner prompt 禁止，执行器过滤，统一由 `conda run` 管理环境 |
+| 执行器使用 `sota_repo_LLaVA`，计划又创建 `llava` | 计划和执行环境职责冲突 | 明确执行器拥有环境生命周期 |
+| `load_pretrained_model()` 参数缺失 | 把加载函数当下载函数，且未读源码签名 | HF 下载改用 CLI，TypeError 分析注入源码上下文 |
+| `pytorch-cuda=12.1` Conda 缺包 | 镜像源不包含 NVIDIA channel 包 | Conda PyTorch-CUDA 自动改为 pip wheel |
+| HF/Xet `Read timed out` | 大模型文件经 CAS/Xet 下载不稳定 | 关闭 Xet、使用 HF 镜像、加长超时、失败自动重试 |
+| 普通 TypeError 被判成 GPU 错误 | 日志里混有 CUDA 初始化文本 | `_classify_error` 调整优先级，TypeError 优先 |
+
+这些改进背后的思路是：自动复现不能只靠“让 LLM 更聪明”，还要把可预期的工程坑写成执行器规则。Prompt 负责表达意图和边界，Executor 负责强约束，Error Analyzer 负责把不可预期错误转成下一步动作。
 
 ## 5. 强化学习与动态优化机制
 
@@ -482,11 +561,9 @@ if result.returncode == 0:
 
 ## 9. 状态与控制设计
 
-## 6. 状态与控制设计
-
 整个系统的关键不是单个节点，而是状态如何流动。Research Graph 和 Code Agent 都围绕状态字典工作，节点之间通过字段传递信息，而不是通过函数参数硬编码。
 
-### 6.1 Research Graph 状态表
+### 9.1 Research Graph 状态表
 
 | 状态字段 | 类型倾向 | 作用 | 由谁写入 |
 |---|---|---|---|
@@ -498,7 +575,7 @@ if result.returncode == 0:
 | `reward_scores` | 浮点数列表 | 每轮奖励记录 | Reflector、Best-of-N |
 | `loop_count` | 整数 | 搜索循环次数 | Reflector |
 
-### 6.2 Code Agent 状态表
+### 9.2 Code Agent 状态表
 
 | 状态字段 | 类型倾向 | 作用 | 由谁写入 |
 |---|---|---|---|
@@ -521,6 +598,19 @@ Research Graph 的关键状态包括：`topic`、`search_queries`、`raw_results
 Code Agent 的关键状态包括：`repo_url`、`repo_dir`、`readme_content`、`requirements_content`、`entry_file`、`repo_structure`、`execution_plan`、`current_step`、`error_message`、`error_type`、`patch`、`fix_count` 和 `status`。这些字段覆盖了代码复现的完整生命周期。
 
 这种状态设计有两个好处：一是便于调试，因为每个阶段都能看到中间产物；二是便于扩展，因为未来可以在不改大结构的情况下增加新的节点或新的分支条件。
+
+### 9.3 为什么使用 Graph 而不是线性 Chain
+
+线性 Chain 适合固定步骤任务，但本项目有三个明显的非线性需求：搜索结果不够时要回到搜索，发现代码时要切到复现子图，复现失败时要回到修复再执行。因此使用 LangGraph 的价值在于可以把这些分支显式建模。
+
+| 需求 | Chain 的问题 | Graph 的解决方式 |
+|---|---|---|
+| 多轮搜索 | 只能手写循环，状态不透明 | `reflector -> decision_node -> query_planner/search` 条件回边 |
+| 可选代码复现 | 分支逻辑混在主函数里 | `code_reproduction` 路由进入子图 |
+| 失败修复 | 异常处理容易散落在执行代码中 | `executor -> error_analyzer -> patch_generator -> executor` 闭环 |
+| 可观测性 | 中间产物难统一记录 | 状态字段统一保存每个节点输出 |
+
+这也是报告中强调“工作流智能体”的原因：系统能力来自节点能力和图结构共同作用，而不是单个大模型调用。
 
 ## 10. 设计亮点与不足
 

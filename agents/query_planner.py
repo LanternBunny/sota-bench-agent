@@ -16,5 +16,22 @@ def query_planner(state: ResearchState) -> dict:
             content = content[4:]
         content = content.strip()
 
-    queries = json.loads(content)
+    try:
+        queries = json.loads(content)
+    except json.JSONDecodeError:
+        queries = [
+            f"{topic} survey review",
+            f"{topic} benchmark dataset",
+            f"{topic} latest papers 2025 2026",
+            f"site:github.com {topic} implementation code",
+            f"{topic} PapersWithCode GitHub repository",
+        ]
+
+    github_queries = [
+        f"site:github.com {topic} implementation code",
+        f"{topic} PapersWithCode GitHub repository",
+    ]
+    for query in github_queries:
+        if query not in queries:
+            queries.append(query)
     return {"search_queries": queries}

@@ -35,4 +35,14 @@ def report_writer(state: ResearchState) -> dict:
     if reward_summary:
         appendix += f"- 平均奖励：{sum(reward_summary) / len(reward_summary):.2f}\n"
 
+    target_repo_url = state.get("target_repo_url", "")
+    reproduction_status = state.get("reproduction_status", "")
+    if target_repo_url or reproduction_status:
+        appendix += "\n## 附录：代码复现\n\n"
+        appendix += f"- 目标仓库：{target_repo_url or '无'}\n"
+        appendix += f"- 复现状态：{reproduction_status or '未执行'}\n"
+        code_rewards = state.get("code_reward_scores", [])
+        if code_rewards:
+            appendix += f"- 代码复现奖励：{code_rewards}\n"
+
     return {"final_report": report_content + appendix}
